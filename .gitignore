@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Database files (sensitive)
+budimind.db
+db/
+
+# Build outputs
+dist/
+
+# Reference/cloned repositories
+psychology-clinic-context/
