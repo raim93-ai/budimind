@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifyToken } from '@/lib/auth';
+import { verifyToken } from '@/lib/auth-edge';
 
-// Protected paths that require authentication
 const protectedPaths = [
   '/dashboard',
   '/api/patients',
@@ -11,7 +10,6 @@ const protectedPaths = [
   '/api/dashboard',
 ];
 
-// Public paths that don't require authentication
 const publicPaths = [
   '/',
   '/login',
@@ -19,10 +17,14 @@ const publicPaths = [
   '/api/auth/login',
 ];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check if path is protected
+  // Skip middleware for login page to avoid redirect loops
+  if (pathname === '/login') {
+    return NextResponse.next();
+  }
+
   const isProtected = protectedPaths.some(path => pathname.startsWith(path));
   const isPublic = publicPaths.some(path => pathname === path || pathname.startsWith(path + '/'));
 
@@ -31,14 +33,14 @@ export function middleware(request: NextRequest) {
   }
 
   if (isProtected) {
-    // Get token from cookie
     const token = request.cookies.get('token')?.value;
 
+    console.log('Middleware - Path:', pathname, 'Token:', token ? 'present' : 'missing');
+
     if (!token) {
-      // Redirect to login for page routes, return 401 for API routes
       if (pathname.startsWith('/api/')) {
         return NextResponse.json(
-          { error: 'Authentication required' },
+          { error: 'Authentication required', debug: 'no token' },
           { status: 401 },
         );
       }
@@ -48,21 +50,29 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
 
-    // Verify token
-    const payload = verifyToken(token);
+    console.log('Middleware - Raw token:', token.substring(0, 20) + '...');
+    
+    const payload = await verifyToken(token);
+
+    console.log('Middleware - Payload:', payload);
 
     if (!payload) {
-      // Invalid token - clear cookie and redirect
+      if (pathname.startsWith('/api/')) {
+        return NextResponse.json(
+          { error: 'Invalid or expired token', debug: 'verifyToken returned null' },
+          { status: 401 },
+        );
+      }
+
       const response = NextResponse.redirect(new URL('/login', request.url));
       response.cookies.delete('token');
       return response;
     }
 
-    // Add user headers for downstream use
     const requestHeaders = new Headers(request.headers);
-    requestHeaders.set('x-user-id', payload.id.toString());
-    requestHeaders.set('x-user-email', payload.email);
-    requestHeaders.set('x-user-name', payload.fullName);
+    requestHeaders.set('x-user-id', String(payload.id));
+    requestHeaders.set('x-user-email', String(payload.email));
+    requestHeaders.set('x-user-name', String(payload.fullName));
 
     return NextResponse.next({
       request: {
@@ -76,13 +86,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
     '/((?!_next/static|_next/image|favicon.ico|public/).*)',
   ],
 };

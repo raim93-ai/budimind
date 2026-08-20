@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:init": "ts-node --esm init-db.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -15,6 +16,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.10.0",
+    "jose": "^6.2.9",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",

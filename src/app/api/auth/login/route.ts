@@ -1,7 +1,7 @@
 import { getDb } from '@/lib/db';
-import { validateConsultantCredentials, generateToken } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { verifyToken, validateConsultantCredentials, generateToken } from '@/lib/auth';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     // Remove password hash from response
     const { password_hash, ...consultantWithoutPassword } = consultant;
 
-    const token = generateToken({
+    const token = await generateToken({
       id: consultant.id,
       email: consultant.email,
       fullName: consultant.full_name,

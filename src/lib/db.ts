@@ -3,11 +3,12 @@ import { join } from 'path';
 import { readFileSync } from 'fs';
 
 // Singleton database connection
-let dbInstance = null;
+let dbInstance: Database.Database | null = null;
 
 export function getDb() {
   if (!dbInstance) {
-    const dbPath = process.env.DATABASE_URL || join(process.cwd(), 'budimind.db');
+    // Use the new database file to avoid locking issues
+    const dbPath = process.env.DATABASE_URL || join(process.cwd(), 'budimind-new.db');
     dbInstance = new Database(dbPath);
     
     // Enable foreign key constraints

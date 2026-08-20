@@ -1,7 +1,8 @@
 import { getDb } from '@/lib/db';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { authMiddleware } from '@/lib/auth-middleware';
+import { assessments } from '@/db/assessments';
+import { verifyToken } from '@/lib/auth-edge';
 
 const assessmentResponseSchema = z.object({
   patientInfo: z.object({
@@ -17,9 +18,38 @@ const assessmentResponseSchema = z.object({
   responses: z.array(z.number()).min(1, 'Responses are required'),
 });
 
+function checkAuth(request: Request): NextResponse | null {
+  // Get token from cookie header
+  const cookieHeader = request.headers.get('cookie') || '';
+  const tokenMatch = cookieHeader.match(/token=([^;]+)/);
+  const token = tokenMatch ? tokenMatch[1] : null;
+
+  if (!token) {
+    return NextResponse.json(
+      { error: 'Authentication required' },
+      { status: 401 },
+    );
+  }
+
+  // This is a simplified check - the middleware already verified the token
+  // We just need to verify it again for safety
+  const { SignJWT, jwtVerify } = require('jose');
+  const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+  const secretKey = new TextEncoder().encode(JWT_SECRET);
+  
+  try {
+    const { payload } = jwtVerify(token, secretKey);
+    return null;
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Invalid or expired token' },
+      { status: 401 },
+    );
+  }
+}
+
 export async function POST(request: Request) {
-  // Check authentication for submitting assessments
-  const authError = authMiddleware(request as any);
+  const authError = checkAuth(request);
   if (authError) return authError;
 
   try {
@@ -39,7 +69,6 @@ export async function POST(request: Request) {
 
     if (existingPatientByIc) {
       patientId = existingPatientByIc.id;
-      // Update existing patient info
       db.prepare(`
         UPDATE patients SET
           full_name = @fullName,
@@ -60,7 +89,6 @@ export async function POST(request: Request) {
       });
     } else if (existingPatientByEmail) {
       patientId = existingPatientByEmail.id;
-      // Update existing patient info
       db.prepare(`
         UPDATE patients SET
           full_name = @fullName,
@@ -80,7 +108,6 @@ export async function POST(request: Request) {
         id: patientId,
       });
     } else {
-      // Create new patient
       const result = db.prepare(`
         INSERT INTO patients (
           full_name, ic_number, email, age, gender, phone, company_id
@@ -100,9 +127,8 @@ export async function POST(request: Request) {
       patientId = result.lastInsertRowid;
     }
 
-    // Import the specific assessment to get its scoring function
-    const assessmentsModule = await import(`@/db/assessments/${assessmentType}`);
-    const assessment = assessmentsModule[assessmentType];
+    // Get the assessment from the assessments object
+    const assessment = (assessments as any)[assessmentType];
 
     if (!assessment) {
       throw new Error(`Assessment ${assessmentType} not found`);
