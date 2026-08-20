@@ -1,6 +1,7 @@
 import { getDb } from '@/lib/db';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { authMiddleware } from '@/lib/auth-middleware';
 
 const assessmentResponseSchema = z.object({
   patientInfo: z.object({
@@ -17,26 +18,30 @@ const assessmentResponseSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  // Check authentication for submitting assessments
+  const authError = authMiddleware(request as any);
+  if (authError) return authError;
+
   try {
     const body = await request.json();
     const { patientInfo, assessmentType, responses } = assessmentResponseSchema.parse(body);
-    
+
     const db = getDb();
-    
+
     // Check if patient exists by IC or email, otherwise create new
     let patientId = null;
-    const existingPatientByIc = patientInfo.icNumber 
+    const existingPatientByIc = patientInfo.icNumber
       ? db.prepare('SELECT id FROM patients WHERE ic_number = ?').get(patientInfo.icNumber)
       : null;
     const existingPatientByEmail = patientInfo.email
       ? db.prepare('SELECT id FROM patients WHERE email = ?').get(patientInfo.email)
       : null;
-    
+
     if (existingPatientByIc) {
       patientId = existingPatientByIc.id;
       // Update existing patient info
       db.prepare(`
-        UPDATE patients SET 
+        UPDATE patients SET
           full_name = @fullName,
           email = @email,
           age = @age,
@@ -51,13 +56,13 @@ export async function POST(request: Request) {
         gender: patientInfo.gender ?? null,
         phone: patientInfo.phone ?? null,
         companyId: patientInfo.companyId ?? null,
-        id: patientId
+        id: patientId,
       });
     } else if (existingPatientByEmail) {
       patientId = existingPatientByEmail.id;
       // Update existing patient info
       db.prepare(`
-        UPDATE patients SET 
+        UPDATE patients SET
           full_name = @fullName,
           ic_number = @icNumber,
           age = @age,
@@ -72,7 +77,7 @@ export async function POST(request: Request) {
         gender: patientInfo.gender ?? null,
         phone: patientInfo.phone ?? null,
         companyId: patientInfo.companyId ?? null,
-        id: patientId
+        id: patientId,
       });
     } else {
       // Create new patient
@@ -89,23 +94,23 @@ export async function POST(request: Request) {
         age: patientInfo.age ?? null,
         gender: patientInfo.gender ?? null,
         phone: patientInfo.phone ?? null,
-        companyId: patientInfo.companyId ?? null
+        companyId: patientInfo.companyId ?? null,
       });
-      
+
       patientId = result.lastInsertRowid;
     }
-    
+
     // Import the specific assessment to get its scoring function
     const assessmentsModule = await import(`@/db/assessments/${assessmentType}`);
     const assessment = assessmentsModule[assessmentType];
-    
+
     if (!assessment) {
       throw new Error(`Assessment ${assessmentType} not found`);
     }
-    
+
     // Score the responses
     const scores = assessment.scoringFn(responses);
-    
+
     // Save assessment response
     const responseResult = db.prepare(`
       INSERT INTO assessment_responses (
@@ -118,26 +123,26 @@ export async function POST(request: Request) {
       assessmentType,
       responses: JSON.stringify(responses),
       rawScores: JSON.stringify(scores),
-      severity: scores.severity ?? 'unknown'
+      severity: scores.severity ?? 'unknown',
     });
-    
+
     return NextResponse.json({
       success: true,
       patientId,
       assessmentId: responseResult.lastInsertRowid,
-      scores
+      scores,
     });
   } catch (error) {
     console.error('Assessment submission error:', error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: error.issues[0].message },
-        { status: 400 }
+        { status: 400 },
       );
     }
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

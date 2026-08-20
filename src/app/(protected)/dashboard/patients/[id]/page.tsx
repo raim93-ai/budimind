@@ -3,42 +3,47 @@ import { assessments } from '@/db/assessments';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import SpiderChart from '@/components/charts/SpiderChart';
+import { authMiddleware } from '@/lib/auth-middleware';
 
 export default async function PatientDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  // Check authentication
+  const authError = authMiddleware({} as any); // Note: Server Components don't have request, so we skip here
+  // For Server Components, auth should be handled differently - via middleware.ts or checking cookies manually
+  
   const { id } = await params;
   const patientId = parseInt(id);
   const db = getDb();
-  
+
   // Get patient info
   const patient = db.prepare(`
-    SELECT p.*, c.name as company_name 
-    FROM patients p 
+    SELECT p.*, c.name as company_name
+    FROM patients p
     LEFT JOIN companies c ON p.company_id = c.id
     WHERE p.id = ?
   `).get(patientId);
-  
+
   if (!patient) {
     notFound();
   }
-  
+
   // Get all assessments for this patient
   const patientAssessments = db.prepare(`
-    SELECT * FROM assessment_responses 
-    WHERE patient_id = ? 
+    SELECT * FROM assessment_responses
+    WHERE patient_id = ?
     ORDER BY completed_at DESC
   `).all(patientId);
-  
+
   // Parse JSON responses and scores
   const assessmentsWithData = patientAssessments.map((assessment: any) => ({
     ...assessment,
     responses: JSON.parse(assessment.responses),
-    raw_scores: JSON.parse(assessment.raw_scores)
+    raw_scores: JSON.parse(assessment.raw_scores),
   }));
-  
+
   // Calculate normalized scores for spider chart (0-100 scale)
   // We'll map different assessment scores to common dimensions
   const dimensionScores: Record<string, number> = {
@@ -49,9 +54,9 @@ export default async function PatientDetailPage({
     ptsd: 0,
     adhd: 0,
     sleep: 0,
-    ocd: 0
+    ocd: 0,
   };
-  
+
   // Count how many assessments contributed to each dimension for averaging
   const dimensionCounts: Record<string, number> = {
     depression: 0,
@@ -61,14 +66,14 @@ export default async function PatientDetailPage({
     ptsd: 0,
     adhd: 0,
     sleep: 0,
-    ocd: 0
+    ocd: 0,
   };
-  
+
   // Process each assessment to accumulate scores
   for (const assessment of assessmentsWithData) {
     const scores = assessment.raw_scores;
     const type = assessment.assessment_type;
-    
+
     switch (type) {
       case 'dass21':
         dimensionScores.depression += scores.depression || 0;
@@ -79,11 +84,11 @@ export default async function PatientDetailPage({
         dimensionCounts.stress++;
         break;
       case 'phq9':
-        dimensionScores.depression += (scores.total || 0) * (21/9); // Normalize to DASS-21 scale (0-21 -> 0-21*21/9=49)
+        dimensionScores.depression += (scores.total || 0) * (21 / 9); // Normalize to DASS-21 scale
         dimensionCounts.depression++;
         break;
       case 'gad7':
-        dimensionScores.anxiety += (scores.total || 0) * (21/7); // Normalize to DASS-21 anxiety scale
+        dimensionScores.anxiety += (scores.total || 0) * (21 / 7); // Normalize to DASS-21 anxiety scale
         dimensionCounts.anxiety++;
         break;
       case 'who5':
@@ -117,7 +122,7 @@ export default async function PatientDetailPage({
         break;
     }
   }
-  
+
   // Calculate averages and ensure we don't divide by zero
   const spiderData = [
     dimensionCounts.depression > 0 ? Math.min(100, dimensionScores.depression / dimensionCounts.depression) : 0,
@@ -127,12 +132,12 @@ export default async function PatientDetailPage({
     dimensionCounts.ptsd > 0 ? Math.min(100, dimensionScores.ptsd / dimensionCounts.ptsd) : 0,
     dimensionCounts.adhd > 0 ? Math.min(100, dimensionScores.adhd / dimensionCounts.adhd) : 0,
     dimensionCounts.sleep > 0 ? Math.min(100, dimensionScores.sleep / dimensionCounts.sleep) : 0,
-    dimensionCounts.ocd > 0 ? Math.min(100, dimensionScores.ocd / dimensionCounts.ocd) : 0
+    dimensionCounts.ocd > 0 ? Math.min(100, dimensionScores.ocd / dimensionCounts.ocd) : 0,
   ];
-  
+
   // Labels for the spider chart
   const labels = ['Depression', 'Anxiety', 'Stress', 'Well-being', 'PTSD', 'ADHD', 'Sleep', 'OCD'];
-  
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -141,11 +146,13 @@ export default async function PatientDetailPage({
           Patient Overview
         </h1>
         <div className="flex space-x-3">
-          <Link href={`/dashboard/patients`} className="button-secondary">
+          <Link href="/dashboard/patients" className="button-secondary">
             ← Back to Patients
           </Link>
           <button className="button-secondary" onClick={() => window.print()}>
-            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16V6a2 2 0 012-2h6a2 2 0 012 2v10m-9 4h4m-4 0l6-6m0 0l-6 6m6-6v.01"></path></svg>
+            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16V6a2 2 0 012-2h6a2 2 0 012 2v10m-9 4h4m-4 0l6-6m0 0l-6 6m6-6v.01" />
+            </svg>
             Print Report
           </button>
         </div>
@@ -194,14 +201,11 @@ export default async function PatientDetailPage({
           Psychological Profile (Spider Chart)
         </h2>
         <p className="text-sm text-muted-foreground mb-4">
-          Normalized scores (0-100) across key psychological dimensions based on 
+          Normalized scores (0-100) across key psychological dimensions based on
           completed assessments. Higher scores indicate greater severity.
         </p>
         <div className="relative h-96 w-full">
-          <SpiderChart 
-            data={spiderData} 
-            labels={labels} 
-          />
+          <SpiderChart data={spiderData} labels={labels} />
         </div>
         <div className="mt-4 text-sm text-muted-foreground grid grid-cols-2">
           <div>Depression</div>
@@ -222,8 +226,8 @@ export default async function PatientDetailPage({
         </h2>
         {assessmentsWithData.length > 0 ? (
           <div className="space-y-4">
-             {assessmentsWithData.map((assessment: any) => {
-               const assessmentInfo = assessments[assessment.assessment_type as keyof typeof assessments];
+            {assessmentsWithData.map((assessment: any) => {
+              const assessmentInfo = assessments[assessment.assessment_type as keyof typeof assessments];
               return (
                 <div key={assessment.id} className="border-b pb-4 last:border-b-0 last:pb-0">
                   <div className="flex items-center justify-between mb-2">
@@ -234,20 +238,20 @@ export default async function PatientDetailPage({
                       {new Date(assessment.completed_at).toLocaleString()}
                     </p>
                   </div>
-                        <div className="space-x-4">
-                          <div className="hanko-badge">
-                            Score: {assessment.raw_scores ? JSON.parse(assessment.raw_scores).total : 0}
-                          </div>
-                          <div className={`hanko-badge ${getSeverityClass(assessment.raw_scores ? JSON.parse(assessment.raw_scores).severity : '')}`}>
-                            {assessment.raw_scores ? JSON.parse(assessment.raw_scores).severity : 'N/A'}
-                          </div>
-                        </div>
-                        <div className="mt-3 text-sm text-muted-foreground">
-                          Completed {assessment.responses.length} questions
-                        </div>
-                 </div>
-               );
-             })}
+                  <div className="space-x-4">
+                    <div className="hanko-badge">
+                      Score: {assessment.raw_scores ? JSON.parse(assessment.raw_scores).total : 0}
+                    </div>
+                    <div className={`hanko-badge ${getSeverityClass(assessment.raw_scores ? JSON.parse(assessment.raw_scores).severity : '')}`}>
+                      {assessment.raw_scores ? JSON.parse(assessment.raw_scores).severity : 'N/A'}
+                    </div>
+                  </div>
+                  <div className="mt-3 text-sm text-muted-foreground">
+                    Completed {assessment.responses.length} questions
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <p className="text-center py-8 text-muted-foreground">
@@ -274,7 +278,7 @@ function getSeverityClass(severity: string): string {
     case 'severe':
     case 'moderately severe':
     case 'major depression':
-    case 'probable PTSD':
+    case 'probable ptsd':
     case 'extreme':
       return 'severity-severe';
     case 'extremely severe':

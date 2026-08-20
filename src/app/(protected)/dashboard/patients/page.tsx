@@ -10,22 +10,22 @@ export default async function PatientsPage() {
   const [search, setSearch] = useState('');
   const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  
+
   // Fetch companies for filter dropdown
   const [companies, setCompanies] = useState<any[]>([]);
-  
+
   useEffect(() => {
     fetchPatients();
     fetchCompanies();
   }, [search, selectedCompany]);
-  
+
   const fetchPatients = async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       if (selectedCompany) params.append('companyId', selectedCompany);
-      
+
       const response = await fetch(`/api/patients?${params.toString()}`);
       const data = await response.json();
       setPatients(data.patients);
@@ -35,7 +35,7 @@ export default async function PatientsPage() {
       setLoading(false);
     }
   };
-  
+
   const fetchCompanies = async () => {
     try {
       const response = await fetch('/api/companies');
@@ -45,7 +45,7 @@ export default async function PatientsPage() {
       console.error('Fetch companies error:', error);
     }
   };
-  
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -72,7 +72,7 @@ export default async function PatientsPage() {
             className="input w-full"
           />
         </div>
-        
+
         <div className="flex-1 md:w-auto">
           <select
             value={selectedCompany ?? ''}
@@ -99,7 +99,7 @@ export default async function PatientsPage() {
           <div className="text-center py-12">
             <p className="text-muted-foreground">No patients found.</p>
             {search || selectedCompany ? (
-              <button 
+              <button
                 onClick={() => {
                   setSearch('');
                   setSelectedCompany(null);
@@ -167,8 +167,8 @@ export default async function PatientsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center space-x-2">
-                      <Link 
-                        href={`/dashboard/patients/${patient.id}`} 
+                      <Link
+                        href={`/dashboard/patients/${patient.id}`}
                         className="button-secondary h-9 px-3"
                       >
                         View

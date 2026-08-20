@@ -1,3 +1,4 @@
+import { useState } from 'react';
 'use client';
 
 import Link from 'next/link';
@@ -7,20 +8,71 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { useRouter } from 'next/navigation';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const patientSchema = z.object({
+  fullName: z.string().min(2, 'Full name must be at least 2 characters'),
+  icNumber: z.string().optional().nullable(),
+  email: z.string().email('Invalid email').optional().or(z.literal('')),
+  age: z.number().int().min(1).max(120).optional().nullable(),
+  gender: z.enum(['male', 'female', 'other', 'prefer_not_to_say']).optional().nullable(),
+  phone: z.string().optional().nullable(),
+  companyId: z.number().int().positive().optional().nullable(),
+});
+
+type PatientFormData = z.infer<typeof patientSchema>;
 
 export default function NewPatientPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm();
-  
-  const onSubmit = (data: any) => {
-    // In a real app, we'd create the patient and redirect
-    // For now, just redirect to assessment selection
-    router.push('/assessment');
+  } = useForm<PatientFormData>({
+    resolver: zodResolver(patientSchema),
+  });
+
+  const onSubmit = async (data: PatientFormData) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Convert empty strings to null for optional fields
+      const payload = {
+        fullName: data.fullName,
+        icNumber: data.icNumber || null,
+        email: data.email || null,
+        age: data.age ?? null,
+        gender: data.gender || null,
+        phone: data.phone || null,
+        companyId: data.companyId ?? null,
+      };
+
+      const response = await fetch('/api/patients', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to create patient');
+      }
+
+      // Redirect to assessment page with patient ID
+      router.push(`/assessment?patientId=${result.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,29 +83,29 @@ export default function NewPatientPage() {
             Register New Patient
           </h2>
         </div>
-        
+
+        {error && (
+          <div className="bg-destructive/20 text-destructive px-4 py-3 rounded-md text-sm">
+            {error}
+          </div>
+        )}
+
         <div className="space-y-4">
           <div>
-            <Label htmlValue="fullName">Full Name *</Label>
+            <Label htmlFor="fullName">Full Name *</Label>
             <Input
-              {...register('fullName', {
-                required: 'Full name is required',
-                minLength: {
-                  value: 2,
-                  message: 'Name must be at least 2 characters',
-                },
-              })}
+              {...register('fullName')}
               id="fullName"
               placeholder="Enter full name"
             />
             {errors.fullName && (
-              <p className="text-sm text-destructive">{String(errors.fullName.message)}</p>
+              <p className="text-sm text-destructive">{errors.fullName.message}</p>
             )}
           </div>
-          
+
           <div className="grid gap-3 md:grid-cols-2">
             <div>
-              <Label htmlValue="icNumber">IC Number</Label>
+              <Label htmlFor="icNumber">IC Number</Label>
               <Input
                 {...register('icNumber')}
                 id="icNumber"
@@ -61,43 +113,35 @@ export default function NewPatientPage() {
               />
             </div>
             <div>
-              <Label htmlValue="email">Email</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
-                {...register('email', {
-                  pattern: {
-                    value: /^\S+@\S+$\.\S+$/,
-                    message: 'Enter a valid email address',
-                  },
-                })}
+                {...register('email')}
                 id="email"
                 type="email"
                 placeholder="your.email@example.com"
               />
+              {errors.email && (
+                <p className="text-sm text-destructive">{errors.email.message}</p>
+              )}
             </div>
           </div>
-          
+
           <div className="grid gap-3 md:grid-cols-2">
             <div>
-              <Label htmlValue="age">Age</Label>
+              <Label htmlFor="age">Age</Label>
               <Input
-                {...register('age', {
-                  min: {
-                    value: 1,
-                    message: 'Age must be at least 1',
-                  },
-                  max: {
-                    value: 120,
-                    message: 'Age must not exceed 120',
-                  },
-                })}
+                {...register('age', { valueAsNumber: true })}
                 id="age"
                 type="number"
                 min="1"
                 max="120"
               />
+              {errors.age && (
+                <p className="text-sm text-destructive">{errors.age.message}</p>
+              )}
             </div>
             <div>
-              <Label htmlValue="gender">Gender</Label>
+              <Label htmlFor="gender">Gender</Label>
               <Select
                 {...register('gender')}
                 id="gender"
@@ -110,10 +154,10 @@ export default function NewPatientPage() {
               </Select>
             </div>
           </div>
-          
+
           <div className="grid gap-3 md:grid-cols-2">
             <div>
-              <Label htmlValue="phone">Phone Number</Label>
+              <Label htmlFor="phone">Phone Number</Label>
               <Input
                 {...register('phone')}
                 id="phone"
@@ -121,9 +165,9 @@ export default function NewPatientPage() {
               />
             </div>
             <div>
-              <Label htmlValue="companyId">Organization ID</Label>
+              <Label htmlFor="companyId">Organization ID</Label>
               <Input
-                {...register('companyId')}
+                {...register('companyId', { valueAsNumber: true })}
                 id="companyId"
                 type="number"
                 placeholder="Organization ID"
@@ -131,11 +175,11 @@ export default function NewPatientPage() {
             </div>
           </div>
         </div>
-        
-        <Button type="submit" className="w-full">
-          Register Patient
+
+        <Button type="submit" disabled={loading} className="w-full">
+          {loading ? 'Creating...' : 'Register Patient'}
         </Button>
-        
+
         <p className="text-xs text-muted-foreground text-center mt-4">
           Already have a patient? <Link href="/assessment" className="text-primary hover:text-primary/80">
             Start Assessment
