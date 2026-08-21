@@ -219,10 +219,32 @@ export default async function PatientDetailPage({
         </div>
       </div>
 
+      {/* Trend Chart - Longitudinal Progress */}
+      {trendData.length > 0 && (
+        <div className="washi-card p-6">
+          <h2 className="text-xl font-semibold mb-4">
+            Longitudinal Trend
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            Your scores over time across psychological dimensions. 
+            Lower scores (except well-being) indicate improvement.
+          </p>
+          <TrendChart
+            data={trendData.map((t) => ({
+              date: t.date,
+              dimension: t.dimension,
+              score: Math.round(t.score),
+              severity_level: t.severity_level,
+              assessment_type: t.assessment_type,
+            }))}
+            height={300}
+            showPoints={true}
+            className="w-full"
+          />
+        </div>
+      )}
+
       {/* Assessment History */}
-      <div className="washi-card p-6">
-        <h2 className="text-xl font-semibold mb-4">
-          Assessment History
         </h2>
         {assessmentsWithData.length > 0 ? (
           <div className="space-y-4">

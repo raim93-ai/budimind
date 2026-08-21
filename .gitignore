@@ -42,7 +42,7 @@ next-env.d.ts
 
 # Database files (sensitive)
 budimind.db
-db/
+budimind-new.db
 
 # Build outputs
 dist/
