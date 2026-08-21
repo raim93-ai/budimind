@@ -1,4 +1,4 @@
-import './globals.css';
+import './tailwind-output.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Noto_Serif_JP } from 'next/font/google';
