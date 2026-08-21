@@ -1,6 +1,8 @@
 import { getDb } from '@/lib/db';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { assessments } from '@/db/assessments';
+import { verifyToken } from '@/lib/auth-edge';
 
 const assessmentResponseSchema = z.object({
   patientInfo: z.object({
@@ -17,6 +19,30 @@ const assessmentResponseSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  // Check authentication
+  const cookieHeader = request.headers.get('cookie') || '';
+  const tokenMatch = cookieHeader.match(/token=([^;]+)/);
+  const token = tokenMatch ? tokenMatch[1] : null;
+
+  if (!token) {
+    return NextResponse.json(
+      { error: 'Authentication required' },
+      { status: 401 },
+    );
+  }
+
+  try {
+    const { jwtVerify } = await import('jose');
+    const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+    const secretKey = new TextEncoder().encode(JWT_SECRET);
+    await jwtVerify(token, secretKey);
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Invalid or expired token' },
+      { status: 401 },
+    );
+  }
+
   try {
     const body = await request.json();
     const { patientInfo, assessmentType, responses } = assessmentResponseSchema.parse(body);
@@ -95,9 +121,8 @@ export async function POST(request: Request) {
       patientId = result.lastInsertRowid;
     }
     
-    // Import the specific assessment to get its scoring function
-    const assessmentsModule = await import(`@/db/assessments/${assessmentType}`);
-    const assessment = assessmentsModule[assessmentType];
+    // Look up the assessment from the registry
+    const assessment = (assessments as any)[assessmentType];
     
     if (!assessment) {
       throw new Error(`Assessment ${assessmentType} not found`);
@@ -120,7 +145,47 @@ export async function POST(request: Request) {
       rawScores: JSON.stringify(scores),
       severity: scores.severity ?? 'unknown'
     });
-    
+
+    // Inject trend data for longitudinal tracking
+    const trendInsert = db.prepare(`
+      INSERT INTO assessment_trends (
+        patient_id, assessment_type, assessment_date, dimension, score, severity_level
+      ) VALUES (
+        @patientId, @assessmentType, @assessmentDate, @dimension, @score, @severity
+      )
+    `);
+
+    const assessmentDate = new Date().toISOString();
+    const now = new Date().toISOString();
+
+    // Map score keys to dimensions and insert trend data
+    for (const [key, value] of Object.entries(scores)) {
+      if (['total', 'severity', 'interpretation'].includes(key)) continue;
+      if (typeof value === 'number') {
+        // Normalize score to 0-100 range (rough approximation)
+        // For DASS-21 subscales: max is 42, so score/42 * 100
+        // For PHQ-9: max is 27, so score/27 * 100
+        // This is a rough normalization — individual assessments may need custom mapping
+        let normalizedScore = 0;
+        const maxValue = assessmentType === 'dass21' ? 42 :
+                        ['phq9', 'bai', 'bdi2'].includes(assessmentType) ? 27 :
+                        ['gad7'].includes(assessmentType) ? 21 :
+                        ['k10'].includes(assessmentType) ? 50 :
+                        ['who5'].includes(assessmentType) ? 25 :
+                        ['pca5'].includes(assessmentType) ? 100 : 100;
+        normalizedScore = Math.min(100, Math.max(0, (value / maxValue) * 100));
+
+        trendInsert.run({
+          patientId,
+          assessmentType,
+          assessmentDate,
+          dimension: key,
+          score: Math.round(normalizedScore * 10) / 10,
+          severity: scores.severity ?? 'unknown'
+        });
+      }
+    }
+
     return NextResponse.json({
       success: true,
       patientId,

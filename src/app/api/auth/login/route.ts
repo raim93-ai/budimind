@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     // Remove password hash from response
     const { password_hash, ...consultantWithoutPassword } = consultant;
 
-    const token = generateToken({
+    const token = await generateToken({
       id: consultant.id,
       email: consultant.email,
       fullName: consultant.full_name,

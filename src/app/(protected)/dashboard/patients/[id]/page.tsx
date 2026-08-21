@@ -3,6 +3,7 @@ import { assessments } from '@/db/assessments';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import SpiderChart from '@/components/charts/SpiderChart';
+import TrendChart from '@/components/charts/TrendChart';
 
 export default async function PatientDetailPage({
   params,
@@ -51,6 +52,20 @@ export default async function PatientDetailPage({
     sleep: 0,
     ocd: 0
   };
+  
+  // Get trend data for this patient
+  const trendData = db.prepare(`
+    SELECT assessment_date as date, dimension, score, severity_level, assessment_type
+    FROM assessment_trends
+    WHERE patient_id = ?
+    ORDER BY assessment_date ASC, dimension ASC
+  `).all(patientId) as Array<{
+    date: string;
+    dimension: string;
+    score: number;
+    severity_level: string | null;
+    assessment_type: string;
+  }>;
   
   // Count how many assessments contributed to each dimension for averaging
   const dimensionCounts: Record<string, number> = {
@@ -215,10 +230,32 @@ export default async function PatientDetailPage({
         </div>
       </div>
 
+      {/* Trend Chart - Longitudinal Progress */}
+      {trendData.length > 0 && (
+        <div className="washi-card p-6">
+          <h2 className="text-xl font-semibold mb-4">
+            Longitudinal Trend
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            Your scores over time across psychological dimensions. 
+            Lower scores (except well-being) indicate improvement.
+          </p>
+          <TrendChart
+            data={trendData.map((t) => ({
+              date: t.date,
+              dimension: t.dimension,
+              score: Math.round(t.score),
+              severity_level: t.severity_level,
+              assessment_type: t.assessment_type,
+            }))}
+            height={300}
+            showPoints={true}
+            className="w-full"
+          />
+        </div>
+      )}
+
       {/* Assessment History */}
-      <div className="washi-card p-6">
-        <h2 className="text-xl font-semibold mb-4">
-          Assessment History
         </h2>
         {assessmentsWithData.length > 0 ? (
           <div className="space-y-4">

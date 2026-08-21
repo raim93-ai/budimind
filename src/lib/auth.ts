@@ -1,25 +1,34 @@
-import jwt from 'jsonwebtoken';
+import { SignJWT, jwtVerify } from 'jose';
 import bcrypt from 'bcrypt';
 import { getDb } from './db';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-const JWT_EXPIRES_IN = '7d'; // 7 days
+const JWT_EXPIRES_IN = '7d';
 
-export function hashPassword(password: string): Promise<string> {
+const secretKey = new TextEncoder().encode(JWT_SECRET);
+
+export async function hashPassword(password: string): Promise<string> {
+  const bcrypt = await import('bcrypt');
   return bcrypt.hash(password, 10);
 }
 
-export function comparePassword(password: string, hashed: string): Promise<boolean> {
+export async function comparePassword(password: string, hashed: string): Promise<boolean> {
+  const bcrypt = await import('bcrypt');
   return bcrypt.compare(password, hashed);
 }
 
-export function generateToken(payload: object): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+export async function generateToken(payload: object): Promise<string> {
+  return await new SignJWT(payload)
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime(JWT_EXPIRES_IN)
+    .sign(secretKey);
 }
 
-export function verifyToken(token: string): any {
+export async function verifyToken(token: string): Promise<any> {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    const { payload } = await jwtVerify(token, secretKey);
+    return payload;
   } catch (error) {
     return null;
   }

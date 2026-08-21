@@ -1,4 +1,5 @@
 import { getDb } from '@/lib/db';
+import Link from 'next/link';
 
 export default async function DashboardPage() {
   const db = getDb();
@@ -53,6 +54,18 @@ export default async function DashboardPage() {
           Dashboard Overview
         </h1>
         <div className="flex space-x-4">
+          <Link href="/dashboard/trends">
+            <button className="button-secondary">
+              <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3v6l3-3"></path></svg>
+              Trends
+            </button>
+          </Link>
+          <Link href="/dashboard/company">
+            <button className="button-secondary">
+              <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h18v1H3zM3 5v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"></path></svg>
+              Corporate
+            </button>
+          </Link>
           <button className="button-secondary">
             <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3"></path></svg>
             Refresh
