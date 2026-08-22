@@ -2,17 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Brain, ClipboardList, Clock, TrendingUp, LogOut } from 'lucide-react';
+import { ClipboardList, Clock, TrendingUp, ChevronDown } from 'lucide-react';
+import AppShell from '@/components/AppShell';
 
+interface AnswerItem { i: number; q: string; v: number; }
 interface HistoryItem {
   id: number;
   assessment_type: string;
   raw_scores: string;
   severity: string | null;
+  answers: string | null;
   completed_at: string;
 }
-
 interface Assignment {
   id: number;
   assessment_type: string;
@@ -22,51 +23,37 @@ interface Assignment {
 }
 
 export default function ClientPortal() {
-  const router = useRouter();
   const [data, setData] = useState<{
     patient: any;
     history: HistoryItem[];
     assignments: Assignment[];
   } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState<number | null>(null);
 
   useEffect(() => {
     fetch('/api/portal/me')
       .then(r => (r.ok ? r.json() : Promise.reject(new Error('Please log in'))))
       .then(setData)
-      .catch(() => router.push('/login'))
+      .catch(() => { window.location.href = '/login'; })
       .finally(() => setLoading(false));
-  }, [router]);
-
-  const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/');
-  };
+  }, []);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-[var(--muted-foreground)]">Loading…</div>;
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)]">
-      {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-[var(--background)]/85 border-b border-[var(--border)]">
-        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 no-underline">
-            <span className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <Brain className="h-4 w-4 text-white" />
-            </span>
-            <span className="font-bold">Budimind</span>
-          </Link>
-          <button onClick={logout} className="flex items-center gap-2 text-sm text-[var(--muted-foreground)] hover:text-primary transition-colors">
-            <LogOut className="h-4 w-4" /> Sign out
-          </button>
-        </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto px-6 py-10">
+    <AppShell
+      brandSub="My wellbeing"
+      nav={[
+        { href: '/portal/me', label: 'Overview', icon: TrendingUp },
+        { href: '/assessment', label: 'Take assessment', icon: ClipboardList },
+      ]}
+    >
+      <div className="max-w-4xl mx-auto px-6 py-10">
         <h1 className="text-2xl font-bold tracking-tight mb-1">
-          Hello, {data?.patient?.full_name ?? data?.patient?.email ?? 'there'}
+          Hello, {data?.patient?.full_name ?? 'there'}
         </h1>
         <p className="text-[var(--muted-foreground)] mb-8">Your personal wellbeing space. Everything here is private to you.</p>
 
@@ -92,8 +79,8 @@ export default function ClientPortal() {
           </section>
         )}
 
-        {/* Quick actions */}
-        <section className="mb-10 grid gap-4 sm:grid-cols-2">
+        {/* Quick action */}
+        <section className="mb-10">
           <Link href="/assessment" className="washi-card p-6 no-underline flex items-start gap-4">
             <span className="h-10 w-10 rounded-xl bg-[var(--primary-soft)] flex items-center justify-center shrink-0">
               <ClipboardList className="h-5 w-5 text-primary" />
@@ -101,24 +88,13 @@ export default function ClientPortal() {
             <div>
               <div className="font-semibold">Take an assessment</div>
               <p className="text-sm text-[var(--muted-foreground)] mt-1">
-                Validated screenings for mood, anxiety, sleep, focus and more.
-              </p>
-            </div>
-          </Link>
-          <Link href="/assessment" className="washi-card p-6 no-underline flex items-start gap-4">
-            <span className="h-10 w-10 rounded-xl bg-[var(--primary-soft)] flex items-center justify-center shrink-0">
-              <TrendingUp className="h-5 w-5 text-primary" />
-            </span>
-            <div>
-              <div className="font-semibold">Your progress</div>
-              <p className="text-sm text-[var(--muted-foreground)] mt-1">
-                See how your scores change over time below.
+                Validated screenings for mood, anxiety, sleep, focus and more — about 5 minutes.
               </p>
             </div>
           </Link>
         </section>
 
-        {/* History */}
+        {/* History with per-question breakdown */}
         <section>
           <h2 className="font-semibold mb-4">Your history</h2>
           {!data?.history || data.history.length === 0 ? (
@@ -127,29 +103,73 @@ export default function ClientPortal() {
             </div>
           ) : (
             <div className="space-y-3">
-              {data.history.map(h => (
-                <div key={h.id} className="washi-card p-5 flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <span className="font-semibold uppercase text-sm">{h.assessment_type}</span>
-                    <span className="text-xs text-[var(--muted-foreground)] ml-3">
-                      {new Date(h.completed_at + 'Z').toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    {h.severity && (
-                      <span className="badge-soft">{h.severity}</span>
+              {data.history.map(h => {
+                const scores = JSON.parse(h.raw_scores || '{}');
+                const answers: AnswerItem[] = h.answers ? JSON.parse(h.answers) : [];
+                const open = expanded === h.id;
+                return (
+                  <div key={h.id} className="washi-card overflow-hidden">
+                    <div className="p-5 flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <span className="font-semibold uppercase text-sm">{h.assessment_type}</span>
+                        <span className="text-xs text-[var(--muted-foreground)] ml-3">
+                          {new Date(h.completed_at + 'Z').toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {h.severity && <span className="badge-soft">{h.severity}</span>}
+                        <span className="text-sm font-semibold">Score {scores.total}</span>
+                        {answers.length > 0 && (
+                          <button
+                            onClick={() => setExpanded(open ? null : h.id)}
+                            className="flex items-center gap-1 text-sm font-semibold text-primary hover:underline bg-transparent border-none p-0 cursor-pointer"
+                          >
+                            {answers.length} questions
+                            <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {open && (
+                      <div className="border-t border-[var(--border)] bg-[var(--muted)]/50 px-5 py-4">
+                        {/* Subscales if present */}
+                        {Object.entries(scores).filter(([k]) => !['total', 'severity', 'interpretation'].includes(k)).length > 0 && (
+                          <div className="mb-4 flex flex-wrap gap-2">
+                            {Object.entries(scores)
+                              .filter(([k]) => !['total', 'severity', 'interpretation'].includes(k))
+                              .map(([k, v]) => (
+                                <span key={k} className="badge-soft !bg-white capitalize">{k}: {String(v)}</span>
+                              ))}
+                          </div>
+                        )}
+                        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)] mb-3">Your answers</p>
+                        <ol className="space-y-2.5">
+                          {answers.map(a => (
+                            <li key={a.i} className="flex items-start justify-between gap-4 text-sm">
+                              <span className="text-[var(--foreground)]">
+                                <span className="text-[var(--muted-foreground)] mr-2">{a.i + 1}.</span>{a.q}
+                              </span>
+                              <span className={`shrink-0 px-2 py-0.5 rounded-md text-xs font-bold ${
+                                a.v >= 2 ? 'bg-red-100 text-red-700' : a.v === 1 ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'
+                              }`}>
+                                {a.v}
+                              </span>
+                            </li>
+                          ))}
+                        </ol>
+                        {scores.interpretation && (
+                          <p className="mt-4 text-sm text-[var(--muted-foreground)] italic">{scores.interpretation}</p>
+                        )}
+                      </div>
                     )}
-                    <Link href={`/assessment/${h.assessment_type}/result?responseId=${h.id}`}
-                      className="text-sm font-semibold text-primary hover:underline">
-                      View results
-                    </Link>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </section>
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }

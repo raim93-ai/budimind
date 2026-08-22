@@ -25,7 +25,7 @@ export async function GET(request: Request) {
   ).get(patientId) as any;
 
   const history = db.prepare(`
-    SELECT id, assessment_type, raw_scores, severity, completed_at
+    SELECT id, assessment_type, raw_scores, severity, answers, completed_at
     FROM assessment_responses WHERE patient_id = ?
     ORDER BY completed_at DESC
   `).all(patientId);

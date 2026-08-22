@@ -76,7 +76,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  min-height: 44px;
+  padding: 0.65rem 1.5rem;
   border-radius: var(--radius);
   background: var(--primary);
   color: var(--primary-foreground);
@@ -84,14 +85,15 @@ body {
   font-size: 0.95rem;
   border: none;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.2s ease;
   text-decoration: none;
 }
 .button:hover {
   background: var(--primary-hover);
-  transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(42, 111, 108, 0.25);
 }
+.button:active { transform: scale(0.98); }
+.button:disabled { opacity: 0.55; pointer-events: none; }
 .button-accent { background: var(--accent); }
 .button-accent:hover { background: #c07d3a; box-shadow: 0 6px 16px rgba(217, 142, 72, 0.3); }
 

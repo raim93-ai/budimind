@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Brain, Building2, Users, Activity, Copy, Plus, LogOut, ShieldCheck } from 'lucide-react';
+import { Building2, Users, Activity, ClipboardList, Plus, Copy, ShieldCheck, UserPlus, BarChart3 } from 'lucide-react';
+import AppShell from '@/components/AppShell';
 
 interface CompanyData {
   company: { id: number; name: string };
@@ -24,7 +23,6 @@ interface Invite {
 }
 
 export default function CompanyPortal() {
-  const router = useRouter();
   const [data, setData] = useState<CompanyData | null>(null);
   const [invites, setInvites] = useState<Invite[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,9 +35,9 @@ export default function CompanyPortal() {
       fetch('/api/portal/company/invites').then(r => (r.ok ? r.json() : { invites: [] })),
     ])
       .then(([d, inv]) => { setData(d); setInvites(inv.invites ?? []); })
-      .catch(() => router.push('/login'))
+      .catch(() => { window.location.href = '/login'; })
       .finally(() => setLoading(false));
-  }, [router]);
+  }, []);
 
   const createInvite = async () => {
     const r = await fetch('/api/portal/company/invites', {
@@ -54,11 +52,6 @@ export default function CompanyPortal() {
     }
   };
 
-  const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    router.push('/');
-  };
-
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-[var(--muted-foreground)]">Loading…</div>;
   }
@@ -67,29 +60,19 @@ export default function CompanyPortal() {
     { icon: Users, label: 'Employees onboarded', value: data.headcount },
     { icon: Activity, label: 'Participation rate', value: `${data.participationRate}%` },
     { icon: ShieldCheck, label: 'Elevated-signal index*', value: `${data.riskIndex}%` },
-    { icon: Clipboard, label: 'Screenings (90 days)', value: data.totalResponses90d },
+    { icon: ClipboardList, label: 'Screenings (90 days)', value: data.totalResponses90d },
   ] : [];
 
   return (
-    <div className="min-h-screen bg-[var(--background)]">
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-[var(--background)]/85 border-b border-[var(--border)]">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <Building2 className="h-4 w-4 text-white" />
-            </span>
-            <div>
-              <div className="font-bold leading-tight">{data?.company?.name ?? 'Company'}</div>
-              <div className="text-xs text-[var(--muted-foreground)] leading-tight">Corporate wellbeing · powered by Budimind</div>
-            </div>
-          </div>
-          <button onClick={logout} className="flex items-center gap-2 text-sm text-[var(--muted-foreground)] hover:text-primary transition-colors">
-            <LogOut className="h-4 w-4" /> Sign out
-          </button>
-        </div>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-6 py-10">
+    <AppShell
+      brandSub={data?.company?.name ?? 'Corporate'}
+      nav={[
+        { href: '/portal/company', label: 'Wellbeing overview', icon: BarChart3 },
+        { href: '/portal/company', label: 'Invites & people', icon: UserPlus },
+        { href: '/assessment', label: 'Assessment library', icon: ClipboardList },
+      ]}
+    >
+      <div className="max-w-5xl mx-auto px-6 py-10">
         <h1 className="text-2xl font-bold tracking-tight mb-1">Workforce wellbeing overview</h1>
         <p className="text-sm text-[var(--muted-foreground)] mb-8">
           Anonymized aggregates only — individual results are never visible to your organisation.
@@ -129,7 +112,7 @@ export default function CompanyPortal() {
                         <span>{band}</span><span className="text-[var(--muted-foreground)]">{pct}%</span>
                       </div>
                       <div className="h-2 rounded-full bg-[var(--muted)] overflow-hidden">
-                        <div className="h-full rounded-full" style={{ width: `${pct}%`, background: bandColor(band) }} />
+                        <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: bandColor(band) }} />
                       </div>
                     </div>
                   );
@@ -149,7 +132,7 @@ export default function CompanyPortal() {
                   const max = Math.max(...data.monthlyTrend.map(x => x.responses));
                   return (
                     <div key={m.month} className="flex-1 flex flex-col items-center gap-2">
-                      <div className="w-full rounded-t-lg bg-primary/80" style={{ height: `${(m.responses / max) * 100}%` }} title={`${m.responses} responses`} />
+                      <div className="w-full rounded-t-lg bg-primary/80 transition-all hover:bg-primary" style={{ height: `${(m.responses / max) * 100}%` }} title={`${m.responses} responses`} />
                       <span className="text-[10px] text-[var(--muted-foreground)]">{m.month.slice(5)}</span>
                     </div>
                   );
@@ -163,8 +146,8 @@ export default function CompanyPortal() {
         <div className="washi-card p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold">Employee invites</h2>
-            <button onClick={createInvite} className="button !py-2 !px-4 text-sm flex items-center gap-2">
-              <Plus className="h-4 w-4" /> Generate invite code
+            <button onClick={createInvite} className="button !py-2 !px-4 text-sm">
+              <Plus className="inline h-4 w-4 mr-1.5 -mt-0.5" /> Generate invite code
             </button>
           </div>
 
@@ -176,8 +159,8 @@ export default function CompanyPortal() {
               </div>
               <button
                 onClick={() => { navigator.clipboard.writeText(newCode); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-                className="button-secondary !py-2 !px-3 text-xs flex items-center gap-1">
-                <Copy className="h-3.5 w-3.5" /> {copied ? 'Copied!' : 'Copy'}
+                className="button-secondary !py-2 !px-3 text-xs">
+                <Copy className="inline h-3.5 w-3.5 mr-1 -mt-0.5" /> {copied ? 'Copied!' : 'Copy'}
               </button>
             </div>
           )}
@@ -198,16 +181,14 @@ export default function CompanyPortal() {
           )}
         </div>
 
-        <p className="mt-6 text-xs text-[var(--muted-foreground)]">
-          * Elevated-signal index = share of recent screenings falling in clinically elevated bands.
-          It indicates programme-level trends, never individual identities.
+        <p className="mt-6 text-xs text-[var(--muted-foreground)] flex items-start gap-1.5">
+          <Building2 className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+          Elevated-signal index = share of recent screenings in clinically elevated bands. Programme-level trends only — never individual identities.
         </p>
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }
-
-function Clipboard(props: any) { return <Brain {...props} />; }
 
 function severityBand(severity: string | null): string {
   if (!severity) return 'Unclassified';

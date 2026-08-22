@@ -128,11 +128,19 @@ export async function POST(request: Request) {
 
     const scores = assessment.scoringFn(responses);
 
+    // Per-question snapshot: question text + chosen value for every item,
+    // so results can be reviewed question-by-question forever.
+    const answers = responses.map((v: number, i: number) => ({
+      i,
+      q: assessment.questions[i]?.text ?? `Question ${i + 1}`,
+      v,
+    }));
+
     const responseResult = db.prepare(`
       INSERT INTO assessment_responses (
-        patient_id, assessment_type, responses, raw_scores, severity
+        patient_id, assessment_type, responses, raw_scores, severity, answers
       ) VALUES (
-        @patientId, @assessmentType, @responses, @rawScores, @severity
+        @patientId, @assessmentType, @responses, @rawScores, @severity, @answers
       )
     `).run({
       patientId,
@@ -140,6 +148,7 @@ export async function POST(request: Request) {
       responses: JSON.stringify(responses),
       rawScores: JSON.stringify(scores),
       severity: scores.severity ?? 'unknown',
+      answers: JSON.stringify(answers),
     });
 
     // Mark any matching pending assignment as completed
