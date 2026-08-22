@@ -6,7 +6,7 @@ const JWT_EXPIRES_IN = '7d';
 const secretKey = new TextEncoder().encode(JWT_SECRET);
 
 export async function generateToken(payload: object): Promise<string> {
-  return await new SignJWT(payload)
+  return await new SignJWT(payload as Record<string, unknown>)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(JWT_EXPIRES_IN)

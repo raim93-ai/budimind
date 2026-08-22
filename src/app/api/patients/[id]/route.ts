@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   // Check authentication
-  const authError = authMiddleware(request as any);
+  const authError = await authMiddleware(request as any);
   if (authError) return authError;
 
   try {

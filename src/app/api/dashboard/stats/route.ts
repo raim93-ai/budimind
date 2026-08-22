@@ -4,29 +4,29 @@ import { authMiddleware } from '@/lib/auth-middleware';
 
 export async function GET(request: Request) {
   // Check authentication
-  const authError = authMiddleware(request as any);
+  const authError = await authMiddleware(request as any);
   if (authError) return authError;
 
   try {
     const db = getDb();
 
     // Get basic stats
-    const totalPatients = db.prepare('SELECT COUNT(*) as count FROM patients').get().count as number;
-    const totalAssessments = db.prepare('SELECT COUNT(*) as count FROM assessment_responses').get().count as number;
-    const totalCompanies = db.prepare('SELECT COUNT(*) as count FROM companies').get().count as number;
+    const totalPatients = (db.prepare('SELECT COUNT(*) as count FROM patients').get() as { count: number }).count;
+    const totalAssessments = (db.prepare('SELECT COUNT(*) as count FROM assessment_responses').get() as { count: number }).count;
+    const totalCompanies = (db.prepare('SELECT COUNT(*) as count FROM companies').get() as { count: number }).count;
 
     // Get assessments completed in last 7 days
-    const recentAssessments = db.prepare(`
+    const recentAssessments = (db.prepare(`
       SELECT COUNT(*) as count FROM assessment_responses
       WHERE completed_at >= date('now', '-7 days')
-    `).get().count as number;
+    `).get() as { count: number }).count;
 
     // Get patients with assessments in last 30 days (active patients)
-    const activePatients = db.prepare(`
+    const activePatients = (db.prepare(`
       SELECT COUNT(DISTINCT patient_id) as count
       FROM assessment_responses
       WHERE completed_at >= date('now', '-30 days')
-    `).get().count as number;
+    `).get() as { count: number }).count;
 
     return NextResponse.json({
       totalPatients,

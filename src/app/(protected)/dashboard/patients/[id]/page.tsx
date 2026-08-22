@@ -3,16 +3,16 @@ import { assessments } from '@/db/assessments';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import SpiderChart from '@/components/charts/SpiderChart';
-import { authMiddleware } from '@/lib/auth-middleware';
+import TrendChart from '@/components/charts/TrendChart';
 
 export default async function PatientDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  // Check authentication
-  const authError = authMiddleware({} as any); // Note: Server Components don't have request, so we skip here
-  // For Server Components, auth should be handled differently - via middleware.ts or checking cookies manually
+  // Check authentication (server-side via middleware pattern)
+  // In App Router, auth is typically handled via middleware.ts
+  // This is a placeholder for server-side auth checks
   
   const { id } = await params;
   const patientId = parseInt(id);
@@ -24,7 +24,18 @@ export default async function PatientDetailPage({
     FROM patients p
     LEFT JOIN companies c ON p.company_id = c.id
     WHERE p.id = ?
-  `).get(patientId);
+  `).get(patientId) as {
+    id: number;
+    full_name: string;
+    ic_number: string | null;
+    email: string | null;
+    age: number | null;
+    gender: string | null;
+    phone: string | null;
+    company_id: number | null;
+    company_name: string | null;
+    created_at: string;
+  } | undefined;
 
   if (!patient) {
     notFound();
@@ -138,6 +149,15 @@ export default async function PatientDetailPage({
   // Labels for the spider chart
   const labels = ['Depression', 'Anxiety', 'Stress', 'Well-being', 'PTSD', 'ADHD', 'Sleep', 'OCD'];
 
+  // Get trend data for this patient
+  const trendData = db.prepare(`
+    SELECT assessment_date as date, dimension, score, severity_level, assessment_type
+    FROM assessment_trends
+    WHERE patient_id = ?
+      AND assessment_date >= datetime('now', '-180 days')
+    ORDER BY assessment_date ASC, dimension ASC
+  `).all(patientId) as { date: string; dimension: string; score: number; severity_level: string | null; assessment_type: string }[];
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -245,7 +265,8 @@ export default async function PatientDetailPage({
       )}
 
       {/* Assessment History */}
-        </h2>
+      <div className="washi-card p-6">
+        <h2 className="text-xl font-semibold mb-4">Assessment History</h2>
         {assessmentsWithData.length > 0 ? (
           <div className="space-y-4">
             {assessmentsWithData.map((assessment: any) => {

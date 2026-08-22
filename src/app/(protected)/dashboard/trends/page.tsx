@@ -1,5 +1,5 @@
 import { getDb } from '@/lib/db';
-import { TrendChart } from '@/components/charts/TrendChart';
+import TrendChart from '@/components/charts/TrendChart';
 import { DIMENSION_COLORS } from '@/lib/dimensions';
 
 interface TrendPoint {
@@ -79,7 +79,7 @@ export default async function TrendsDashboardPage({
   const trends = db.prepare(trendQuery).all(...trendParams) as TrendPoint[];
 
   // Get patient summaries
-  const patientQuery = `
+  let patientQuery = `
     SELECT 
       p.id,
       p.full_name,

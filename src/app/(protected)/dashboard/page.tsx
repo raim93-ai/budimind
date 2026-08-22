@@ -5,9 +5,9 @@ export default async function DashboardPage() {
   const db = getDb();
   
   // Get stats
-  const totalPatients = db.prepare('SELECT COUNT(*) as count FROM patients').get().count as number;
-  const totalAssessments = db.prepare('SELECT COUNT(*) as count FROM assessment_responses').get().count as number;
-  const totalCompanies = db.prepare('SELECT COUNT(*) as count FROM companies').get().count as number;
+  const totalPatients = (db.prepare('SELECT COUNT(*) as count FROM patients').get() as { count: number }).count;
+  const totalAssessments = (db.prepare('SELECT COUNT(*) as count FROM assessment_responses').get() as { count: number }).count;
+  const totalCompanies = (db.prepare('SELECT COUNT(*) as count FROM companies').get() as { count: number }).count;
   
   // Recent assessments (last 7 days)
   const recentAssessments = db.prepare(`

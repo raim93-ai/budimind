@@ -17,7 +17,7 @@ export async function comparePassword(password: string, hashed: string): Promise
 }
 
 export async function generateToken(payload: object): Promise<string> {
-  return await new SignJWT(payload)
+  return await new SignJWT(payload as Record<string, unknown>)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(JWT_EXPIRES_IN)
@@ -52,7 +52,12 @@ export async function createConsultant(email: string, password: string, fullName
 
 export async function findConsultantByEmail(email: string) {
   const db = getDb();
-  return db.prepare('SELECT * FROM consultants WHERE email = @email').get({ email });
+  return db.prepare('SELECT * FROM consultants WHERE email = @email').get({ email }) as {
+    id: number;
+    email: string;
+    password_hash: string;
+    full_name: string;
+  } | undefined;
 }
 
 export async function validateConsultantCredentials(email: string, password: string) {

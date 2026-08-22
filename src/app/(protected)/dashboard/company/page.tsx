@@ -1,6 +1,6 @@
 import { getDb } from '@/lib/db';
 import Link from 'next/link';
-import { TrendChart } from '@/components/charts/TrendChart';
+import TrendChart from '@/components/charts/TrendChart';
 import { DIMENSION_COLORS } from '@/lib/dimensions';
 
 interface TrendPoint {
@@ -45,7 +45,7 @@ export default async function CorporateDashboardPage({
         c.name,
         COUNT(DISTINCT p.id) as patient_count,
         COUNT(ar.id) as assessment_count,
-        AVG(CAST(ar.raw_scores AS REAL)) as avg_raw_score
+        AVG(CAST(ar.raw_scores AS REAL)) as avg_score
       FROM companies c
       LEFT JOIN patients p ON c.id = p.company_id
       LEFT JOIN assessment_responses ar ON p.id = ar.patient_id
@@ -56,13 +56,13 @@ export default async function CorporateDashboardPage({
 
   // Enhanced company stats with trend data
   const enhancedCompanies: CompanyStat[] = companies.map((c) => {
-    const score = c.avg_raw_score
-      ? Math.round(c.avg_raw_score)
+    const score = c.avg_score
+      ? Math.round(c.avg_score)
       : 0;
     // Rough risk classification
     let risk: 'low' | 'moderate' | 'high' = 'low';
-    if (score > 70) risk = 'high';
-    else if (score > 40) risk = 'moderate';
+    if (c.avg_score > 70) risk = 'high';
+    else if (c.avg_score > 40) risk = 'moderate';
 
     return {
       id: c.id,

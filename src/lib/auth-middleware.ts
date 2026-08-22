@@ -12,7 +12,7 @@ declare module 'next/server' {
   }
 }
 
-export function authMiddleware(request: NextRequest): NextResponse | null {
+export async function authMiddleware(request: NextRequest): Promise<NextResponse | null> {
   // Get token from httpOnly cookie
   const token = request.cookies.get('token')?.value;
 
@@ -23,7 +23,7 @@ export function authMiddleware(request: NextRequest): NextResponse | null {
     );
   }
 
-  const payload = verifyToken(token);
+  const payload = await verifyToken(token);
 
   if (!payload) {
     return NextResponse.json(

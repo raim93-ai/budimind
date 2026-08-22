@@ -4,7 +4,7 @@ import { authMiddleware } from '@/lib/auth-middleware';
 
 export async function GET(request: Request) {
   // Check authentication
-  const authError = authMiddleware(request as any);
+  const authError = await authMiddleware(request as any);
   if (authError) return authError;
 
   try {

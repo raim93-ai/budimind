@@ -1,6 +1,6 @@
 import { getDb } from '@/lib/db';
 import Link from 'next/link';
-import { TrendChart } from '@/components/charts/TrendChart';
+import TrendChart from '@/components/charts/TrendChart';
 
 interface AssessmentResponse {
   id: number;

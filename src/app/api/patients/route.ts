@@ -15,7 +15,7 @@ const patientSchema = z.object({
 
 export async function GET(request: Request) {
   // Check authentication
-  const authError = authMiddleware(request as any);
+  const authError = await authMiddleware(request as any);
   if (authError) return authError;
 
   try {
@@ -72,8 +72,8 @@ export async function GET(request: Request) {
       countParams.push(companyId);
     }
 
-    const totalResult = db.prepare(countQuery).get(countParams);
-    const total = totalResult.total as number;
+    const totalResult = db.prepare(countQuery).get(countParams) as { total: number };
+    const total = totalResult.total;
 
     return NextResponse.json({
       patients,
@@ -95,7 +95,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   // Check authentication
-  const authError = authMiddleware(request as any);
+  const authError = await authMiddleware(request as any);
   if (authError) return authError;
 
   try {

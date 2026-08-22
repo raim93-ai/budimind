@@ -9,7 +9,7 @@ const buttonVariants = {
 };
 
 interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: keyof typeof buttonVariants;
   asChild?: boolean;
 }

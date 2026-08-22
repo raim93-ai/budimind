@@ -22,7 +22,12 @@ export async function POST(request: Request) {
     }
 
     // Remove password hash from response
-    const { password_hash, ...consultantWithoutPassword } = consultant;
+    const { password_hash: _pw, ...consultantWithoutPassword } = consultant as {
+      id: number;
+      email: string;
+      full_name: string;
+      password_hash: string;
+    };
 
     const token = await generateToken({
       id: consultant.id,

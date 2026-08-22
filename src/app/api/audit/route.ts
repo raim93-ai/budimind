@@ -37,11 +37,11 @@ export async function POST(request: Request) {
       resourceType: resourceType || 'unknown',
       resourceId: resourceId,
       ipAddress:
-        request.headers.get('x-forwarded-for') ||
-        request.headers.get('x-real-ip') ||
-        null,
-      userAgent: request.headers.get('user-agent') || null,
-      details: details ? JSON.stringify(details) : null,
+          request.headers.get('x-forwarded-for') ||
+          request.headers.get('x-real-ip') ||
+          undefined,
+        userAgent: request.headers.get('user-agent') || undefined,
+      details: details ? JSON.stringify(details) : undefined,
     });
 
     return NextResponse.json({ success: true });

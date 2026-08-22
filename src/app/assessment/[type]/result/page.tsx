@@ -18,7 +18,7 @@ export default async function AssessmentResultPage({
     FROM assessment_responses ar
     JOIN patients p ON ar.patient_id = p.id
     WHERE ar.id = ? AND ar.patient_id = ?
-  `).get(assessmentId, patientId);
+  `).get(assessmentId, patientId) as { id: number; patient_id: number; assessment_type: string; responses: string; raw_scores: string; severity: string; completed_at: string; patient_name: string } | undefined;
   
   if (!assessmentResult) {
     notFound();
@@ -28,7 +28,7 @@ export default async function AssessmentResultPage({
   const assessment = (assessments as any)[assessmentResult.assessment_type];
   
   // Parse the scores
-  const scores = JSON.parse(assessmentResult.raw_scores);
+  const scores = JSON.parse(assessmentResult.raw_scores) as Record<string, number | string>;
   
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-6 py-12">
@@ -55,7 +55,7 @@ export default async function AssessmentResultPage({
             </div>
             <p className="text-lg text-muted-foreground">
               {scores.interpretation || `Severity: ${scores.severity || 'N/A'}`}</p>
-            <div className={`hanko-badge ${getSeverityClass(scores.severity)} px-4 py-2`}>
+            <div className={`hanko-badge ${getSeverityClass(scores.severity as string)} px-4 py-2`}>
               {scores.severity || 'N/A'}
             </div>
           </div>

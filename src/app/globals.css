@@ -2,360 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom CSS Properties for Japanese Tatami / Washi Paper Theme */
+/* WCAG AA Compliant Color Palette for Psychology Website */
 :root {
-  --background: #F5F0E8; /* 和紙 - Washi paper cream */
-  --foreground: #2C2416; /* 墨色 - Sumi ink */
+  --background: #FFFFFF; /* White background for maximum contrast */
+  --foreground: #1A1A1A; /* Dark charcoal for readability */
   
-  --primary: #4A7C59; /* 青磁 - Celadon green (tea ceremony) */
+  --primary: #2563EB; /* Blue-600 - trustworthy, calming */
   --primary-foreground: #FFFFFF;
   
-  --secondary: #C5D5B4; /* 畳色 - Tatami green */
-  --secondary-foreground: #2C2416;
+  --secondary: #64748B; /* Slate-500 - secondary actions */
+  --secondary-foreground: #FFFFFF;
   
-  --accent: #BF4B4B; /* 朱色 - Vermillion (temple seals) */
+  --accent: #DC2626; /* Red-600 for calls-to-action, but use sparingly */
   --accent-foreground: #FFFFFF;
   
-  --muted: #F0E9D9; /* 薄紙 - Light washi */
-  --muted-foreground: #6B6358; /* 薄墨 - Light ink */
+  --muted: #F3F4F6; /* Gray-100 - subtle backgrounds */
+  --muted-foreground: #6B7280; /* Gray-500 - secondary text */
   
-  --border: #D4C5B2; /* 木肌 - Wood grain */
-  --input: #D4C5B2;
-  --ring: #4A7C59;
+  --border: #D1D5DB; /* Gray-300 - form borders */
+  --input: #F9FAFB; /* Gray-100 - input backgrounds */
+  --ring: #2563EB; /* Blue-600 focus ring */
   
-  --destructive: #CF6679; /* 赤褐色 - Red-brown */
+  --destructive: #DC2626; /* Red-600 */
   --destructive-foreground: #FFFFFF;
   
-  --success: #90BE6D; /* 若葉色 - Young leaf green */
-  --warning: #F9C74F; /* 黄土色 - Ochre */
-  --info: #5B9BD5; /* 藍青 - Indigo blue */
+  --success: #059669; /* Green-600 - positive feedback */
+  --warning: #D97706; /* Amber-500 - warnings */
+  --info: #0891B2; /* Sky-500 - informational */
   
-  /* Severity colors */
-  --severity-normal: #90BE6D; /* 若葉色 - Young leaf */
-  --severity-mild: #F9C74F; /* 黄土色 - Ochre */
-  --severity-moderate: #F8966E; /* 桃色 - Peach */
-  --severity-severe: #CF6679; /* 赤褐色 - Red-brown */
-  --severity-extreme: #B33A3A; /* 深紅 - Deep crimson */
-  
-  --radius: 0.75rem;
+  --radius: 0.5rem;
   
   /* Typography */
   --font-sans: 'Inter', system-ui, sans-serif;
-  --font-serif: 'Noto Serif JP', 'Yu Mincho', serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'Merriweather', serif;
+  --font-mono: 'Fira Code', monospace;
 }
 
+/* Reduced contrast for dark mode */
 .dark {
-  --background: #2C2416; /* 墨色 - Sumi ink */
-  --foreground: #F5F0E8; /* 和紙 - Washi paper cream */
+  --background: #1A1A1A;
+  --foreground: #F5F5F5;
   
-  --primary: #6B8E23; /* オリーブドラブ - Olive drab */
-  --secondary: #8FBC8F; /* 濃海緑 - Dark sea green */
-  --accent: #CD5C5C; /* インディアンレッド - Indian red */
-}
-
-/* Base styles */
-* {
-  border-color: hsl(var(--border));
-}
-
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-feature-settings: "rlig" 1, "calt" 1;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
-  font-weight: bold;
-  letter-spacing: -0.025em;
-}
-
-p {
-  font-family: var(--font-sans);
-  line-height: 1.6;
-}
-
-/* Component styles */
-.shoji-divider {
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: hsl(var(--border) / 0.5);
-  background-image: url('/images/shoji-pattern.svg');
-  background-size: 40px 20px;
-  background-repeat: repeat-x;
-}
-
-/* Hanko seal badge */
-.hanko-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
-  background-color: hsl(var(--accent) / 0.2);
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  border-width: 1px;
-  border-color: hsl(var(--accent) / 0.5);
-  color: hsl(var(--accent));
-}
-
-/* Noren-style header */
-.noren-header {
-  background-color: hsl(var(--primary) / 0.9);
-  border-bottom-width: 1px;
-  border-bottom-color: hsl(var(--border) / 0.3);
-  padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-/* Washi paper card */
-.washi-card {
-  background-color: hsl(var(--background) / 0.8);
-  backdrop-filter: blur-sm;
-  border-radius: 0.75rem;
-  border-width: 1px;
-  border-color: hsl(var(--border) / 0.5);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-}
-.washi-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
-}
-
-/* Tatami mat accent */
-.tatami-accent {
-  background-color: hsl(var(--secondary) / 0.5);
-  border-width: 1px;
-  border-color: hsl(var(--secondary) / 0.3);
-}
-
-/* Severity indicators */
-.severity-normal {
-  background-color: hsl(var(--severity-normal) / 0.2);
-  color: hsl(var(--severity-normal));
-}
-
-.severity-mild {
-  background-color: hsl(var(--severity-mild) / 0.2);
-  color: hsl(var(--severity-mild));
-}
-
-.severity-moderate {
-  background-color: hsl(var(--severity-moderate) / 0.2);
-  color: hsl(var(--severity-moderate));
-}
-
-.severity-severe {
-  background-color: hsl(var(--severity-severe) / 0.2);
-  color: hsl(var(--severity-severe));
-}
-
-.severity-extreme {
-  background-color: hsl(var(--severity-extreme) / 0.2);
-  color: hsl(var(--severity-extreme));
-}
-
-/* Input styles */
-.input {
-  display: flex;
-  height: 2.5rem;
-  width: 100%;
-  border-radius: 0.5rem;
-  border-width: 1px;
-  border-color: hsl(var(--input));
-  background-color: hsl(var(--background));
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: hsl(var(--foreground));
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--ring));
-  --tw-ring-offset-width: 2px;
-  --tw-ring-offset-color: hsl(var(--background));
-}
-.input:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--ring));
-  --tw-ring-offset-width: 2px;
-  --tw-ring-offset-color: hsl(var(--background));
-}
-.input::placeholder {
-  color: hsl(var(--muted-foreground));
-}
-.input:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-/* Button styles */
-.button {
-  display: inline-flex;
-  height: 2.5rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border-width: 1px;
-  border-color: hsl(var(--border));
-  background-color: hsl(var(--primary));
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-duration: 200ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  --tw-bg-opacity: 1;
-  background-color: rgb(74 124 89 / var(--tw-bg-opacity));
-}
-.button:hover {
-  --tw-bg-opacity: 0.9;
-  background-color: rgb(74 124 89 / var(--tw-bg-opacity));
-}
-.button:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--ring));
-  --tw-ring-offset-width: 2px;
-  --tw-ring-offset-color: hsl(var(--background));
-}
-.button:disabled {
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-/* Button secondary */
-.button-secondary {
-  display: inline-flex;
-  height: 2.5rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border-width: 1px;
-  border-color: hsl(var(--border));
-  background-color: hsl(var(--secondary));
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  --tw-text-opacity: 1;
-  color: rgb(44 36 22 / var(--tw-text-opacity));
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-duration: 200ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  --tw-bg-opacity: 1;
-  background-color: rgb(197 213 180 / var(--tw-bg-opacity));
-}
-.button-secondary:hover {
-  --tw-bg-opacity: 0.9;
-  background-color: rgb(197 213 180 / var(--tw-bg-opacity));
-}
-.button-secondary:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--ring));
-  --tw-ring-offset-width: 2px;
-  --tw-ring-offset-color: hsl(var(--background));
-}
-.button-secondary:disabled {
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-/* Button accent */
-.button-accent {
-  display: inline-flex;
-  height: 2.5rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border-width: 1px;
-  border-color: hsl(var(--border));
-  background-color: hsl(var(--accent));
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-duration: 200ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  --tw-bg-opacity: 1;
-  background-color: rgb(191 75 75 / var(--tw-bg-opacity));
-}
-.button-accent:hover {
-  --tw-bg-opacity: 0.9;
-  background-color: rgb(191 75 75 / var(--tw-bg-opacity));
-}
-.button-accent:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-width)) var(--tw-ring-color);
-  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-  --tw-ring-color: hsl(var(--ring));
-  --tw-ring-offset-width: 2px;
-  --tw-ring-offset-color: hsl(var(--background));
-}
-.button-accent:disabled {
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-/* Animations */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* Washi paper texture */
-@keyframes paper-texture {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 100px 100px;
-  }
-}
-
-.paper-texture {
-  background-image: url('/images/washi-texture.svg');
-  background-size: 200px 200px;
-  animation: paper-texture 20s linear infinite;
+  --primary: #3B82F6; /* Blue-500 */
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #98A2B3; /* Slate-400 */
+  --secondary-foreground: #FFFFFF;
+  
+  --accent: #F87171; /* Red-400 */
+  --accent-foreground: #FFFFFF;
+  
+  --muted: #1E293B; /* Slate-900 */
+  --muted-foreground: #94A3B8; /* Slate-400 */
+  
+  --border: #374151; /* Gray-700 */
+  --input: #374151;
+  --ring: #3B82F6;
 }

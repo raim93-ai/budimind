@@ -22,7 +22,7 @@ export default function SpiderChart({
   }));
 
   return (
-    <div className="relative w-full h-[{height}px]">
+    <div className={`relative w-full h-[${height}px]`}>
       <RadarChart
         width={width}
         height={height}
@@ -53,7 +53,7 @@ export default function SpiderChart({
           }}
         />
         <Tooltip
-          formatter={(value: number) => `${value}%`}
+          formatter={(value: any) => [`${value}%`, 'Score']}
           contentStyle={{
             background: 'rgba(245, 240, 232, 0.9)',
             border: '1px solid #D4C5B2',

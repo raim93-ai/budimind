@@ -61,10 +61,10 @@ export async function POST(request: Request) {
     // Check if patient exists by IC or email, otherwise create new
     let patientId = null;
     const existingPatientByIc = patientInfo.icNumber
-      ? db.prepare('SELECT id FROM patients WHERE ic_number = ?').get(patientInfo.icNumber)
+      ? db.prepare('SELECT id FROM patients WHERE ic_number = ?').get(patientInfo.icNumber) as { id: number } | undefined
       : null;
     const existingPatientByEmail = patientInfo.email
-      ? db.prepare('SELECT id FROM patients WHERE email = ?').get(patientInfo.email)
+      ? db.prepare('SELECT id FROM patients WHERE email = ?').get(patientInfo.email) as { id: number } | undefined
       : null;
 
     if (existingPatientByIc) {
