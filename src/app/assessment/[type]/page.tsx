@@ -49,6 +49,18 @@ export default function AssessmentFormPage() {
   const [showResult, setShowResult] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [responses, setResponses] = useState<number[]>([]);
+
+  // Logged-in clients skip the demographics step — results attach to their account
+  const [sessionRole, setSessionRole] = useState<string | null>(null);
+  const [sessionChecked, setSessionChecked] = useState(false);
+  useEffect(() => {
+    fetch('/api/auth/session')
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => { if (d?.role) setSessionRole(d.role); })
+      .catch(() => {})
+      .finally(() => setSessionChecked(true));
+  }, []);
+
   
   // Handle patient info form submission
   const handlePatientInfoSubmit = (e: React.FormEvent) => {
@@ -92,7 +104,11 @@ export default function AssessmentFormPage() {
   };
   
   // Patient Info Form
-  if (currentQuestionIndex === 0) {
+  if (!sessionChecked) {
+    return <div className="min-h-[50vh] flex items-center justify-center text-muted-foreground">Loading…</div>;
+  }
+
+  if (currentQuestionIndex === 0 && sessionRole !== 'client') {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-6 py-12">
         <form onSubmit={handlePatientInfoSubmit} className="washi-card w-full max-w-md space-y-6">

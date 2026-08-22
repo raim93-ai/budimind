@@ -73,7 +73,16 @@ export async function middleware(request: NextRequest) {
       return response;
     }
 
-    // Role-based scope enforcement
+    // Role-based scope enforcement.
+    // Exception: any authenticated role may POST assessment responses
+    // (clients submit their own screenings; the API scopes data server-side).
+    if (pathname.startsWith('/api/assessments') && request.method === 'POST') {
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set('x-user-id', String(payload.id));
+      requestHeaders.set('x-user-role', String(payload.role ?? ''));
+      return NextResponse.next({ request: { headers: requestHeaders } });
+    }
+
     if (!roleAllowed(payload.role as string | undefined, pathname)) {
       if (pathname.startsWith('/api/')) {
         return NextResponse.json({ error: 'Forbidden for your role' }, { status: 403 });
