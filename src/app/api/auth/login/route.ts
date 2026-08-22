@@ -1,7 +1,7 @@
 import { getDb } from '@/lib/db';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { verifyToken, validateConsultantCredentials, generateToken } from '@/lib/auth';
+import { validateCredentials, generateToken, ROLE_HOME, type UserRole } from '@/lib/auth';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -13,33 +13,34 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { email, password } = loginSchema.parse(body);
 
-    const consultant = await validateConsultantCredentials(email, password);
-    if (!consultant) {
+    const user = await validateCredentials(email, password);
+    if (!user) {
       return NextResponse.json(
         { error: 'Invalid email or password' },
         { status: 401 }
       );
     }
 
-    // Remove password hash from response
-    const { password_hash: _pw, ...consultantWithoutPassword } = consultant as {
-      id: number;
-      email: string;
-      full_name: string;
-      password_hash: string;
-    };
-
     const token = await generateToken({
-      id: consultant.id,
-      email: consultant.email,
-      fullName: consultant.full_name,
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      companyId: user.companyId ?? null,
+      patientId: user.patientId ?? null,
     });
 
     const response = NextResponse.json({
-      consultant: consultantWithoutPassword,
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        companyId: user.companyId,
+      },
+      redirectTo: ROLE_HOME[user.role as UserRole] ?? '/dashboard',
     });
 
-    // Set HTTP-only cookie
     response.cookies.set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
