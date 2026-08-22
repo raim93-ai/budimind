@@ -1,61 +1,171 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* WCAG AA Compliant Color Palette for Psychology Website */
+/* ============================================================
+   Budimind Design System — calming, clinical, premium
+   WCAG AA compliant palette
+   ============================================================ */
 :root {
-  --background: #FFFFFF; /* White background for maximum contrast */
-  --foreground: #1A1A1A; /* Dark charcoal for readability */
-  
-  --primary: #2563EB; /* Blue-600 - trustworthy, calming */
+  --background: #FAFBFC;
+  --foreground: #16232E;
+
+  --primary: #2A6F6C;        /* deep healing teal */
+  --primary-hover: #215958;
   --primary-foreground: #FFFFFF;
-  
-  --secondary: #64748B; /* Slate-500 - secondary actions */
-  --secondary-foreground: #FFFFFF;
-  
-  --accent: #DC2626; /* Red-600 for calls-to-action, but use sparingly */
+  --primary-soft: #E3F0EF;
+
+  --accent: #D98E48;         /* warm amber for CTAs, used sparingly */
   --accent-foreground: #FFFFFF;
-  
-  --muted: #F3F4F6; /* Gray-100 - subtle backgrounds */
-  --muted-foreground: #6B7280; /* Gray-500 - secondary text */
-  
-  --border: #D1D5DB; /* Gray-300 - form borders */
-  --input: #F9FAFB; /* Gray-100 - input backgrounds */
-  --ring: #2563EB; /* Blue-600 focus ring */
-  
-  --destructive: #DC2626; /* Red-600 */
-  --destructive-foreground: #FFFFFF;
-  
-  --success: #059669; /* Green-600 - positive feedback */
-  --warning: #D97706; /* Amber-500 - warnings */
-  --info: #0891B2; /* Sky-500 - informational */
-  
-  --radius: 0.5rem;
-  
-  /* Typography */
+
+  --secondary: #5B7185;
+  --secondary-foreground: #FFFFFF;
+
+  --muted: #EFF3F4;
+  --muted-foreground: #5C6B78;
+
+  --border: #DCE3E7;
+  --input: #FFFFFF;
+  --ring: #2A6F6C;
+
+  --success: #1E8E5A;
+  --warning: #C77D1F;
+  --info: #2276A8;
+  --destructive: #C0392B;
+
+  --radius: 0.75rem;
+
   --font-sans: 'Inter', system-ui, sans-serif;
-  --font-serif: 'Merriweather', serif;
-  --font-mono: 'Fira Code', monospace;
 }
 
-/* Reduced contrast for dark mode */
-.dark {
-  --background: #1A1A1A;
-  --foreground: #F5F5F5;
-  
-  --primary: #3B82F6; /* Blue-500 */
-  --primary-foreground: #FFFFFF;
-  
-  --secondary: #98A2B3; /* Slate-400 */
-  --secondary-foreground: #FFFFFF;
-  
-  --accent: #F87171; /* Red-400 */
-  --accent-foreground: #FFFFFF;
-  
-  --muted: #1E293B; /* Slate-900 */
-  --muted-foreground: #94A3B8; /* Slate-400 */
-  
-  --border: #374151; /* Gray-700 */
-  --input: #374151;
-  --ring: #3B82F6;
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-destructive: var(--destructive);
+  --font-sans: var(--font-sans);
+  --radius-lg: var(--radius);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* ---------- Component classes ---------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+}
+.button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(42, 111, 108, 0.25);
+}
+.button-accent { background: var(--accent); }
+.button-accent:hover { background: #c07d3a; box-shadow: 0 6px 16px rgba(217, 142, 72, 0.3); }
+
+.button-secondary,
+.button-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1.5px solid var(--primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.button-secondary:hover,
+.button-outline:hover {
+  background: var(--primary-soft);
+}
+
+.washi-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.5);
+  box-shadow: 0 1px 3px rgba(22, 35, 46, 0.05), 0 8px 24px rgba(22, 35, 46, 0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.washi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(22, 35, 46, 0.06), 0 16px 40px rgba(22, 35, 46, 0.08);
+}
+
+.hero-gradient {
+  background:
+    radial-gradient(1200px 500px at 15% -10%, rgba(42, 111, 108, 0.10), transparent 60%),
+    radial-gradient(900px 400px at 90% 10%, rgba(217, 142, 72, 0.08), transparent 55%),
+    linear-gradient(180deg, #F4F8F7 0%, var(--background) 100%);
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+}
+
+.badge-soft {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
