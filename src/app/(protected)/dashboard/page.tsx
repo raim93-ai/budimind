@@ -1,7 +1,6 @@
 import { getDb } from '@/lib/db';
 import Link from 'next/link';
-import AppShell from '@/components/AppShell';
-import { LayoutDashboard, Users, ClipboardList, Building2, TrendingUp, UserPlus } from 'lucide-react';
+import ConsultantNavShell from './ConsultantNavShell';
 
 export default async function DashboardPage() {
   const db = getDb();
@@ -33,17 +32,7 @@ export default async function DashboardPage() {
   `).all() as Array<{ assessment_type: string; count: number }>;
 
   return (
-    <AppShell
-      brandSub="Practitioner"
-      nav={[
-        { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
-        { href: '/dashboard/patients', label: 'Patients', icon: Users },
-        { href: '/dashboard/patients/new', label: 'Register patient', icon: UserPlus },
-        { href: '/assessment', label: 'Assessment library', icon: ClipboardList },
-        { href: '/dashboard/trends', label: 'Trends', icon: TrendingUp },
-        { href: '/dashboard/company', label: 'Corporate view', icon: Building2 },
-      ]}
-    >
+    <ConsultantNavShell>
       <div className="max-w-6xl mx-auto px-6 py-10">
         <h1 className="text-2xl font-bold tracking-tight mb-1">Practice overview</h1>
         <p className="text-sm text-[var(--muted-foreground)] mb-8">Your caseload at a glance.</p>
@@ -112,6 +101,6 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
-    </AppShell>
+    </ConsultantNavShell>
   );
 }
