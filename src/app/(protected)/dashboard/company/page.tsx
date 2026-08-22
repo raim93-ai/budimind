@@ -29,12 +29,13 @@ export const dynamic = 'force-dynamic';
 export default async function CorporateDashboardPage({
   searchParams,
 }: {
-  searchParams: { companyId?: string; days?: string };
+  searchParams: Promise<{ companyId?: string; days?: string }>;
 }) {
+  const sp = await searchParams;
   const db = getDb();
-  const days = parseInt(searchParams.days || '90');
-  const companyId = searchParams.companyId
-    ? parseInt(searchParams.companyId)
+  const days = parseInt(sp.days || '90');
+  const companyId = sp.companyId
+    ? parseInt(sp.companyId)
     : undefined;
 
   // Get all companies with patient counts and risk stats

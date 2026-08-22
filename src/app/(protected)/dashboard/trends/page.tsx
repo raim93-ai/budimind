@@ -26,16 +26,17 @@ export const dynamic = 'force-dynamic';
 export default async function TrendsDashboardPage({
   searchParams,
 }: {
-  searchParams: {
+  searchParams: Promise<{
     patientId?: string;
     companyId?: string;
     dimension?: string;
     days?: string;
     assessmentType?: string;
-  };
+  }>;
 }) {
+  const sp = await searchParams;
   const db = getDb();
-  const days = parseInt(searchParams.days || '90');
+  const days = parseInt(sp.days || '90');
 
   // Build query for trend data
   let trendQuery = `
@@ -53,21 +54,21 @@ export default async function TrendsDashboardPage({
   `;
   const trendParams: any[] = [];
 
-  if (searchParams.patientId) {
+  if (sp.patientId) {
     trendQuery += ' AND p.id = ?';
-    trendParams.push(parseInt(searchParams.patientId));
+    trendParams.push(parseInt(sp.patientId));
   }
-  if (searchParams.companyId) {
+  if (sp.companyId) {
     trendQuery += ' AND p.company_id = ?';
-    trendParams.push(parseInt(searchParams.companyId));
+    trendParams.push(parseInt(sp.companyId));
   }
-  if (searchParams.dimension) {
+  if (sp.dimension) {
     trendQuery += ' AND at.dimension = ?';
-    trendParams.push(searchParams.dimension);
+    trendParams.push(sp.dimension);
   }
-  if (searchParams.assessmentType) {
+  if (sp.assessmentType) {
     trendQuery += ' AND at.assessment_type = ?';
-    trendParams.push(searchParams.assessmentType);
+    trendParams.push(sp.assessmentType);
   }
 
   trendQuery += `
@@ -91,13 +92,13 @@ export default async function TrendsDashboardPage({
   `;
   const patientParams = [days];
 
-  if (searchParams.companyId) {
+  if (sp.companyId) {
     patientQuery += ' AND p.company_id = ?';
-    patientParams.push(parseInt(searchParams.companyId));
+    patientParams.push(parseInt(sp.companyId));
   }
-  if (searchParams.patientId) {
+  if (sp.patientId) {
     patientQuery += ' AND p.id = ?';
-    patientParams.push(parseInt(searchParams.patientId));
+    patientParams.push(parseInt(sp.patientId));
   }
 
   patientQuery += ' GROUP BY p.id ORDER BY p.full_name';
@@ -248,7 +249,7 @@ export default async function TrendsDashboardPage({
                 <select
                   name="companyId"
                   className="w-full hanko-badge px-3 py-2 text-sm"
-                  defaultValue={searchParams.companyId || ''}
+                  defaultValue={sp.companyId || ''}
                 >
                   <option value="">All Companies</option>
                   {companies.map((c) => (
@@ -265,7 +266,7 @@ export default async function TrendsDashboardPage({
                 <select
                   name="patientId"
                   className="w-full hanko-badge px-3 py-2 text-sm"
-                  defaultValue={searchParams.patientId || ''}
+                  defaultValue={sp.patientId || ''}
                 >
                   <option value="">All Patients</option>
                   {patientSummaries.map((p) => (
@@ -282,7 +283,7 @@ export default async function TrendsDashboardPage({
                 <select
                   name="dimension"
                   className="w-full hanko-badge px-3 py-2 text-sm"
-                  defaultValue={searchParams.dimension || ''}
+                  defaultValue={sp.dimension || ''}
                 >
                   <option value="">All Dimensions</option>
                   {dimensions.map((d) => (
@@ -299,7 +300,7 @@ export default async function TrendsDashboardPage({
                 <select
                   name="days"
                   className="w-full hanko-badge px-3 py-2 text-sm"
-                  defaultValue={searchParams.days || '90'}
+                  defaultValue={sp.days || '90'}
                 >
                   <option value="30">30 Days</option>
                   <option value="60">60 Days</option>

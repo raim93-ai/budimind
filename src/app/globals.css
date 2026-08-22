@@ -170,6 +170,32 @@ button.washi-card:hover { transform: translateY(-1px); }
   font-weight: 600;
 }
 
+/* Clinical severity badges (used across dashboard, trends, results) */
+.hanko-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+.severity-normal { background: rgba(30, 142, 90, 0.12); color: #16794c; }
+.severity-mild { background: rgba(199, 125, 31, 0.14); color: #9a6218; }
+.severity-moderate { background: rgba(217, 142, 72, 0.16); color: #a45f1d; }
+.severity-severe { background: rgba(192, 57, 43, 0.12); color: #a03227; }
+.severity-extreme { background: rgba(147, 32, 22, 0.15); color: #8f2015; }
+
+/* Native select aligned with inputs */
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235C6B78' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.25rem;
+}
+
 input:focus-visible, select:focus-visible, textarea:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 1px;
