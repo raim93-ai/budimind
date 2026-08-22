@@ -24,9 +24,9 @@ const publicPaths = [
 
 // Role-scoped route prefixes: a user can only access prefixes allowed for their role
 const roleScopes: Record<string, string[]> = {
-  consultant: ['/dashboard'],
-  company_admin: ['/dashboard/company', '/portal/company'],
-  client: ['/portal/me'],
+  consultant: ['/dashboard', '/api/assignments'],
+  company_admin: ['/dashboard/company', '/portal/company', '/api/assignments', '/api/portal/company'],
+  client: ['/portal/me', '/api/portal/me'],
 };
 
 function roleAllowed(role: string | undefined, pathname: string): boolean {
