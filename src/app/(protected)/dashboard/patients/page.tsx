@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { getDb } from '@/lib/db';
 
-export default async function PatientsPage() {
+export default function PatientsPage() {
   const [patients, setPatients] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [selectedCompany, setSelectedCompany] = useState<string | null>(null);

@@ -1,6 +1,7 @@
 import { getDb } from '@/lib/db';
 import { assessments } from '@/db/assessments';
 import { notFound } from 'next/navigation';
+import PrintButton from './PrintButton';
 import Link from 'next/link';
 import SpiderChart from '@/components/charts/SpiderChart';
 import TrendChart from '@/components/charts/TrendChart';
@@ -169,12 +170,7 @@ export default async function PatientDetailPage({
           <Link href="/dashboard/patients" className="button-secondary">
             ← Back to Patients
           </Link>
-          <button className="button-secondary" onClick={() => window.print()}>
-            <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16V6a2 2 0 012-2h6a2 2 0 012 2v10m-9 4h4m-4 0l6-6m0 0l-6 6m6-6v.01" />
-            </svg>
-            Print Report
-          </button>
+          <PrintButton />
         </div>
       </div>
 
@@ -283,10 +279,10 @@ export default async function PatientDetailPage({
                   </div>
                   <div className="space-x-4">
                     <div className="hanko-badge">
-                      Score: {assessment.raw_scores ? JSON.parse(assessment.raw_scores).total : 0}
+                      Score: {assessment.raw_scores?.total ?? 0}
                     </div>
-                    <div className={`hanko-badge ${getSeverityClass(assessment.raw_scores ? JSON.parse(assessment.raw_scores).severity : '')}`}>
-                      {assessment.raw_scores ? JSON.parse(assessment.raw_scores).severity : 'N/A'}
+                    <div className={`hanko-badge ${getSeverityClass(assessment.raw_scores?.severity ?? '')}`}>
+                      {assessment.raw_scores?.severity ?? 'N/A'}
                     </div>
                   </div>
                   <div className="mt-3 text-sm text-muted-foreground">
