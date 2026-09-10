@@ -1,0 +1,48 @@
+services:
+  # Corporate PostgreSQL Database
+  corporate-db:
+    image: postgres:17-alpine
+    container_name: budimind-corporate-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: budimind_corporate
+    ports:
+      - '5432:5432'
+    volumes:
+      - corporate-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d budimind_corporate']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - budimind-network
+
+  # Clinical PostgreSQL Database
+  clinical-db:
+    image: postgres:17-alpine
+    container_name: budimind-clinical-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: budimind_clinical
+    ports:
+      - '5433:5432'
+    volumes:
+      - clinical-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d budimind_clinical']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - budimind-network
+
+volumes:
+  corporate-db-data:
+  clinical-db-data:
+
+networks:
+  budimind-network:
+    driver: bridge

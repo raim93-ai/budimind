@@ -1,0 +1,12 @@
+{
+  "name": "worker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "python -m worker.main",
+    "lint": "ruff check .",
+    "format": "ruff format .",
+    "typecheck": "mypy .",
+    "test": "pytest"
+  }
+}

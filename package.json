@@ -1,0 +1,42 @@
+{
+  "name": "budimind",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "pnpm install --frozen-lockfile",
+    "format:check": "prettier --check README.md AGENTS.md package.json pnpm-workspace.yaml tsconfig.json eslint.config.mjs .prettierrc compose.yaml \"apps/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"packages/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"docs/**/*.md\" \"psychology-clinic-context/**/*.{md,json}\"",
+    "format": "prettier --write README.md AGENTS.md package.json pnpm-workspace.yaml tsconfig.json eslint.config.mjs .prettierrc compose.yaml \"apps/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"packages/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"docs/**/*.md\" \"psychology-clinic-context/**/*.{md,json}\"",
+    "lint": "eslint \"**/*.{ts,tsx}\" --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "build:web": "pnpm --filter corporate-web build && pnpm --filter clinic-web build",
+    "build:packages": "pnpm --filter ui build && pnpm --filter contracts build",
+    "build": "pnpm run build:web && pnpm run build:packages",
+    "dev:corporate-web": "pnpm --filter corporate-web dev",
+    "dev:clinic-web": "pnpm --filter clinic-web dev",
+    "python:sync": "uv sync --all-packages --locked",
+    "python:lint": "uv run ruff check .",
+    "python:typecheck": "uv run mypy apps/api-corporate/app && uv run mypy apps/api-clinical/app && uv run mypy apps/worker/worker",
+    "python:test": "uv run pytest",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "db:migrate": "uv run python scripts/migrate.py",
+    "db:reset:test": "uv run python scripts/reset_test_db.py"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^9.5.0",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "prettier": "3.9.6",
+    "typescript": "5.9.2",
+    "typescript-eslint": "^8.67.0",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "packageManager": "pnpm@10.15.1"
+}
