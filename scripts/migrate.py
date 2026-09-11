@@ -20,7 +20,7 @@ async def migrate(url: str) -> None:
                 """
                 CREATE TABLE IF NOT EXISTS _schema_migrations (
                     version VARCHAR(64) PRIMARY KEY,
-                    applied_at TIMESTAMP(6) NOT NULL
+                    applied_at TIMESTAMP(6) WITH TIME ZONE NOT NULL
                 )
                 """
             )

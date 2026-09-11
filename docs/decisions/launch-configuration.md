@@ -21,38 +21,36 @@ contract, or permission to process real-person data. Gate G0 closes only when th
 
 ## 2. Data residency and cloud model
 
-### Hostinger and MySQL
+### Vercel and Supabase
 
-- Use MySQL 8 with `utf8mb4`, strict SQL mode, UTC connections, TLS, migrations, foreign keys, and separate database
-  users for each plane.
-- Keep Corporate/Analysis and Clinical/Public in physically separate databases. Credentials for either API must be
-  unable to connect to the other database. There are no cross-database joins, shared ORM sessions, or shared backups.
-- Select and retain evidence for Hostinger's Malaysia data-centre location and execute its data-processing terms before
-  any real-person data.
-- Prefer same-host private access. If remote access is unavoidable, require TLS and exact fixed-IP allow-listing; the
-  wildcard `%` host is prohibited.
+- Use two independent Supabase projects in the specific Singapore region (`ap-southeast-1`): one Corporate/Analysis
+  project and one Clinical/Public project. They must not share database credentials, Auth tenants, Storage buckets,
+  secrets, migrations, backups, or service identities. Cross-project application queries and joins are prohibited.
+- PostgreSQL is the system of record. Apply versioned migrations, foreign keys, constraints, UTC timestamps and RLS to
+  every exposed table. Revoke default grants not required by `anon` or `authenticated`; a secret key is server-only and
+  must never reach browser code because it bypasses RLS.
+- Deploy the two Next.js applications as separate Vercel projects with Functions pinned to Singapore (`sin1`). Keep
+  clinical and corporate environment variables and deployment access separate. CDN-hosted public assets contain only
+  reviewed public content.
+- Use Supabase's transaction pooler for Vercel serverless database traffic and do not maintain per-instance SQLAlchemy
+  pools. Require TLS for every hosted connection.
+- Singapore hosting is a cross-border transfer from Malaysia. Before any real-person data, execute the Supabase and
+  Vercel terms/DPA, record subprocessors and retention, complete a Malaysian PDPA transfer-impact assessment, update
+  notices/consents, and obtain Privacy/DPO, Legal, Security and Clinical Governance approval.
 - Encrypt restricted fields at application level with independently controlled keys. Do not put identity, clinical
   content, assessment answers, or secrets in logs, analytics, URLs, calendar titles, email subjects, or WhatsApp.
-- Hostinger's standard daily backup window is not sufficient proof for clinical recovery. Retain an encrypted,
-  independently controlled backup with restore tests. Require point-in-time recovery for clinical records before G2.
-- If the purchased Hostinger Enterprise service cannot evidence private connectivity, encryption/key control,
-  point-in-time recovery, auditability, deletion protection, and tested recovery, it may host public and low-risk
-  operational services only. The clinical database must then move to a dedicated managed MySQL service in Malaysia
-  before real-person use. This is a gate, not an optional optimisation.
 
-### AWS account model
+### Free-tier boundary and production upgrade
 
-AWS does not exist yet and is not a Stage 0–3 prerequisite. Before G2, create one AWS Organization with:
-
-1. a management account containing no workloads;
-2. security/log archive;
-3. non-production; and
-4. production accounts.
-
-Use `ap-southeast-5` (Malaysia) as the primary region. Initially use AWS only for services that have approved contracts
-and a clear need: SES email and independently controlled S3/KMS backups. Enable organisation trail logging, budgets,
-root-user hardware MFA, least-privilege roles, GuardDuty, Security Hub, versioning, Object Lock where retention permits,
-and tested restore. A secondary region requires a documented transfer-impact assessment and owner approval.
+- Vercel Hobby and Supabase Free are limited to synthetic development and non-production previews. Do not enable real
+  identities, public booking, assessment submission, payments, calendar/WhatsApp integration, or clinical records.
+- Vercel Hobby is restricted to non-commercial personal use; BudiMind must use a commercial Vercel plan before any
+  business launch.
+- Supabase Free has no automatic backups or PITR and may pause after low activity. Before G2, move both projects to a
+  paid organisation and verify daily backups, restore, deletion protection, audit evidence, uptime/support, SSL
+  enforcement, network restrictions, MFA, Security Advisor findings, and an independently controlled encrypted export.
+- AWS is removed from the current trajectory. Add another cloud only through a new approved ADR tied to a demonstrated
+  requirement that Vercel/Supabase cannot meet.
 
 ## 3. Clinical service contract
 
@@ -186,18 +184,18 @@ response.
 
 ## 6. Vendor baseline and contract conditions
 
-| Function           | Decision                                                                              | Required controls before real-person use                                                                                                                        |
-| ------------------ | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Identity           | Auth0 public cloud, Australia region; separate development/staging/production tenants | DPA/TIA; Universal Login; authorization code + PKCE; staff MFA; step-up; identity metadata only; no clinical content                                            |
-| Payment            | Stripe Malaysia hosted Checkout                                                       | Malaysian agreement and DPA; cards/FPX; signed/idempotent webhooks; least privilege; reconciliation; no card data                                               |
-| Email              | AWS SES in `ap-southeast-5`                                                           | AWS account/DPA; SPF, DKIM, DMARC; generic content and secure portal links; no clinical content in subject/body                                                 |
-| WhatsApp           | Meta WhatsApp Cloud API notification templates only                                   | Explicit opt-in; approved generic templates; no consultation, free-form clinical chat, diagnosis, assessment, or sensitive appointment detail; email fallback   |
-| Calendar/video     | Google Calendar and Google Meet                                                       | Per-clinician OAuth; separate dev/prod projects; verified domain; minimal scopes; generic titles/opaque IDs; app database is authoritative; no clinical content |
-| SMS                | Disabled                                                                              | Add only after a documented accessibility/coverage need, vendor review, consent, DPA/TIA, and safe content contract                                             |
-| Analytics          | Plausible on unauthenticated marketing pages only                                     | DPA/TIA; no authenticated, booking, assessment, clinical, analyst, or sponsor routes; no sensitive custom properties                                            |
-| Error reporting    | Sentry EU/DE region                                                                   | DPA/TIA; replay off; default PII off; scrub URL/query/header/body/user data; codes and correlation IDs only                                                     |
-| Primary hosting    | Hostinger Malaysia                                                                    | Executed service/DPA terms; exact location evidence; separation, TLS, key, backup, restore, logging, incident, and subprocessors review                         |
-| Backup/email cloud | AWS Malaysia                                                                          | Organisation/account baseline above; least privilege, KMS, immutable audit, budgets, tested restore                                                             |
+| Function          | Decision                                                               | Required controls before real-person use                                                                                                                        |
+| ----------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Identity          | Supabase Auth, separate corporate and clinical projects                | DPA/TIA; server-side sessions; PKCE where applicable; staff MFA/step-up; RLS; identity metadata only; no clinical content                                       |
+| Payment           | Stripe Malaysia hosted Checkout                                        | Malaysian agreement and DPA; cards/FPX; signed/idempotent webhooks; least privilege; reconciliation; no card data                                               |
+| Email             | Supabase Auth email for identity only; transactional provider deferred | Custom SMTP before real-person use; SPF, DKIM, DMARC; generic content and secure portal links; no clinical content in subject/body                              |
+| WhatsApp          | Meta WhatsApp Cloud API notification templates only                    | Explicit opt-in; approved generic templates; no consultation, free-form clinical chat, diagnosis, assessment, or sensitive appointment detail; email fallback   |
+| Calendar/video    | Google Calendar and Google Meet                                        | Per-clinician OAuth; separate dev/prod projects; verified domain; minimal scopes; generic titles/opaque IDs; app database is authoritative; no clinical content |
+| SMS               | Disabled                                                               | Add only after a documented accessibility/coverage need, vendor review, consent, DPA/TIA, and safe content contract                                             |
+| Analytics         | Plausible on unauthenticated marketing pages only                      | DPA/TIA; no authenticated, booking, assessment, clinical, analyst, or sponsor routes; no sensitive custom properties                                            |
+| Error reporting   | Sentry EU/DE region                                                    | DPA/TIA; replay off; default PII off; scrub URL/query/header/body/user data; codes and correlation IDs only                                                     |
+| Application host  | Vercel, Functions pinned to Singapore (`sin1`)                         | Commercial plan before business use; DPA/TIA; separate projects/access; TLS; logs/retention; incident and subprocessor review                                   |
+| Data/Auth/Storage | Two Supabase projects, specific Singapore region                       | Paid plan before real data; DPA/TIA; RLS/grants tests; TLS; MFA; backups/PITR decision; restore/exit test; separate corporate/clinical secrets                  |
 
 Vendor marketing claims are not BudiMind compliance evidence. Record contract owner, signed agreement/DPA, hosting
 region, subprocessors, transfer basis/TIA, retention/deletion, incident terms, access method, and exit test in the
@@ -254,23 +252,23 @@ professional approvals.
   [Act 580 background](https://lembagakaunselor.kpwkm.gov.my/latar-belakang/).
 - Emergency support:
   [MOH Talian HEAL 15555 and 999](https://jknselangor.moh.gov.my/htar/en/pengumuman-awam/661-talian-heal-15555).
-- Hostinger: [server locations](https://support.hostinger.com/en/articles/1583267-where-are-hostinger-servers-located),
-  [security controls](https://support.hostinger.com/en/articles/1583287-what-security-measures-does-hostinger-use),
-  [backup behavior](https://www.hostinger.com/support/1665153-how-to-activate-daily-backups-in-hostinger/), and
-  [remote MySQL](https://www.hostinger.com/support/4602010-how-to-set-up-remote-mysql-access-on-cpanel-at-hostinger/).
-- AWS:
-  [Organizations best practices](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html),
-  [SES regions](https://docs.aws.amazon.com/general/latest/gr/ses.html),
-  [S3 resiliency](https://docs.aws.amazon.com/AmazonS3/latest/userguide/disaster-recovery-resiliency.html), and
-  [KMS regions](https://docs.aws.amazon.com/general/latest/gr/kms.html).
+- Supabase: [regions](https://supabase.com/docs/guides/platform/regions),
+  [free-plan billing](https://supabase.com/docs/guides/platform/billing-on-supabase),
+  [free-project pausing](https://supabase.com/docs/guides/platform/free-project-pausing),
+  [database backups](https://supabase.com/docs/guides/platform/backups),
+  [production checklist](https://supabase.com/docs/guides/deployment/going-into-prod),
+  [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), and
+  [API keys](https://supabase.com/docs/guides/getting-started/api-keys).
+- Vercel: [Hobby plan](https://vercel.com/docs/plans/hobby),
+  [Function regions](https://vercel.com/docs/functions/configuring-functions/region), and
+  [FastAPI deployment](https://vercel.com/docs/frameworks/backend/fastapi).
 - Booking vendors: [Amelia feature catalogue](https://wpamelia.com/features/),
   [Google Calendar behavior](https://wpamelia.com/documentation/google-calendar-google-meet/),
   [WhatsApp behavior](https://wpamelia.com/documentation/whatsapp/),
   [Google OAuth policy](https://developers.google.com/identity/protocols/oauth2/policies), and
   [Calendar FreeBusy](https://developers.google.com/workspace/calendar/api/v3/reference/freebusy/query).
-- Identity/payment: [Auth0 tenant regions](https://auth0.com/docs/get-started/auth0-overview/create-tenants),
-  [Auth0 RBAC](https://auth0.com/docs/manage-users/access-control/rbac),
-  [Stripe Malaysia agreement](https://stripe.com/legal/ssa/my), [Stripe FPX](https://docs.stripe.com/payments/fpx), and
+- Identity/payment: [Stripe Malaysia agreement](https://stripe.com/legal/ssa/my),
+  [Stripe FPX](https://docs.stripe.com/payments/fpx), and
   [Stripe webhook security](https://docs.stripe.com/webhooks?lang=node).
 - Measurement: [WHO-5 publication/licence](https://www.who.int/publications/m/item/WHO-UCN-MSD-MHE-2024.01) and
   [Malay WHO-5 validation](https://pmc.ncbi.nlm.nih.gov/articles/PMC8998902/).

@@ -21,18 +21,18 @@ client-authorised referral handoff or opaque benefit-entitlement check.
 ## Architecture
 
 ```
-Hostinger Malaysia edge/runtime
+Vercel Singapore runtime/CDN
        |
        +---------------- Corporate/Analysis ----------------+
-       |  corporate-web -> corporate-api -> corporate-db    |
-       |                     |             -> released views |
-       |                     +-> SQS -> worker               |
-       |                     +-> report storage              |
+       |  corporate-web -> corporate-api -> corporate Supabase |
+       |                     |             -> released views   |
+       |                     +-> governed background jobs      |
+       |                     +-> private Supabase Storage      |
        |                                                     |
        +---------------- Clinical/Public --------------------+
-       |  clinic-web -> clinical-api -> clinical-db          |
-       |                   |          -> private documents    |
-       |                   +-> SQS -> reminders/reconciliation|
+       |  clinic-web -> clinical-api -> clinical Supabase      |
+       |                   |          -> private Storage        |
+       |                   +-> reminders/reconciliation jobs    |
        |                                                     |
        +---------------- Trust brokers ----------------------+
           invitation broker | entitlement broker | audit sink
@@ -47,7 +47,7 @@ budimind/
 │   ├── clinic-web         # Next.js public, client, employee, CP UI
 │   ├── api-corporate      # FastAPI corporate collection, analysis, release API
 │   ├── api-clinical       # FastAPI CP, availability, booking, intake, care API
-│   └── worker             # Python SQS consumers and scheduled jobs
+│   └── worker             # Python governed background and scheduled jobs
 ├── packages/
 │   ├── ui                 # Accessible, non-domain-specific UI components
 │   ├── contracts          # Generated TypeScript clients and shared enums
@@ -83,16 +83,17 @@ budimind/
 
 - **Web target**: Next.js 16 Active LTS + React 19 + strict TypeScript
 - **API target**: FastAPI + Python 3.13 + Pydantic 2 + SQLAlchemy 2.x + Alembic
-- **Database**: MySQL 8 (separate corporate and clinical databases/users)
+- **Database/identity/storage**: two separate Supabase projects backed by PostgreSQL
 - **Queue/storage**: add durable providers only when the implementing stage requires them
-- **Identity**: Auth0 Australia, conditional on contract/TIA; server-side sessions and privileged-role MFA
-- **Infrastructure**: Hostinger Enterprise Malaysia; AWS `ap-southeast-5` later for approved email/backup/security use
+- **Identity**: Supabase Auth per data plane; server-side sessions, RLS, and privileged-role MFA
+- **Infrastructure**: Vercel functions in Singapore (`sin1`) with Supabase projects in Singapore
 - **CI/CD**: GitHub Actions with protected deployment environments
 - **Observability**: structured redacted logs; Sentry EU only after contract/TIA
 - **Assurance targets**: OWASP ASVS 5.0, NIST SSDF, and WCAG 2.2 AA
 
-The checked-in manifests were upgraded from the old prototype toolchain. Stage `S00-T02` records the lockfile and
-remaining dependency-policy evidence before feature work.
+The free Vercel/Supabase setup is for synthetic development and preview only. Before real-person use, move to a
+commercial Vercel plan and paid Supabase organisation with approved cross-border terms, backups, recovery, audit, and
+availability controls.
 
 ## Current scaffold preview
 

@@ -32,7 +32,7 @@ Current status: **OPEN — values defined, approvals missing**
 | Credentialing and indemnity procedure               | Clinical governance + legal                     | Defined; unsigned                             |
 | Corporate instrument/licence register               | I/O + legal/privacy                             | Policy defined; instrument permission missing |
 | Vendor/region/contract register                     | Privacy + security + procurement                | Vendors selected; contracts missing           |
-| Domain and AWS account ownership                    | Product + engineering/security                  | Domain value and AWS accounts missing         |
+| Domain, Vercel and Supabase ownership               | Product + engineering/security                  | Domain value and production accounts missing  |
 
 Synthetic implementation may use the defined values. No real-person data, public booking, assessment, payment, or
 production claim is permitted while this gate is open.
@@ -62,8 +62,9 @@ Current status: **NOT ELIGIBLE**
 All of the following are release-blocking:
 
 1. G0 and G1 passed on the release candidate.
-2. Hostinger, Auth0, Stripe, AWS, Meta, Google, Plausible, Sentry, and any subprocessors have approved agreements, DPAs,
-   regional configuration evidence, TIAs where required, least-privilege access, and tested exit/deletion.
+2. Vercel, Supabase, Stripe, Meta, Google, Plausible, Sentry, the transactional-email provider, and any subprocessors
+   have approved agreements, DPAs, regional configuration evidence, TIAs where required, least-privilege access, and
+   tested exit/deletion. Vercel and both Supabase projects are on approved paid plans; free tiers are prohibited.
 3. Every bookable clinician has current verified registration/practising certificate, scope, indemnity, supervision, and
    clinical-governance approval.
 4. Production-like staging passes synthetic UAT for visitor, client, clinician, clinical operations, employee, sponsor,

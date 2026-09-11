@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     # Database
     CORPORATE_DATABASE_URL: str = (
-        "mysql+asyncmy://corporate_app:corporate_dev@localhost:3306/budimind_corporate"
+        "postgresql+asyncpg://corporate_app:corporate_dev@localhost:5432/budimind_corporate"
     )
 
     # CORS

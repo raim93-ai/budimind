@@ -28,7 +28,7 @@
 | `python/budimind_core`       | Intended shared audit/identity/error primitives    | Must not contain cross-plane repositories or data access              |
 | `python/corporate_domain`    | Intended corporate scoring/release domain          | Implement only approved instruments and policies                      |
 | `python/clinical_domain`     | Intended clinical booking/care domain              | Implement only approved clinical workflows                            |
-| `compose.yaml`               | Two isolated local MySQL services                  | Stage 00 must verify startup, credentials, migrations and health      |
+| `compose.yaml`               | Two isolated local PostgreSQL services             | Mirrors the two-project Supabase boundary for synthetic development   |
 | `infra/`                     | Empty Terraform module/environment layout          | Do not build cloud infrastructure before Stage 11                     |
 | `tests/`                     | Empty contract/security/performance/fixture layout | Add tests with the feature that needs them                            |
 | `psychology-clinic-context/` | Persistent product and engineering context         | Update only for approved decisions or plan evidence                   |

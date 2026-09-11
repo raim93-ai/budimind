@@ -6,10 +6,12 @@ agent, including lower-capability agents. The detailed execution order is in
 
 ## Current architecture override
 
-The product owner's 2026-09-11 launch decision supersedes older PostgreSQL/AWS-first wording in the nested context
-repository: use two isolated MySQL 8 boundaries on the approved Hostinger Enterprise Malaysia service; create AWS later
-in `ap-southeast-5` for approved email, backup and security services. The complete controlling record is
-`docs/decisions/launch-configuration.md`. Sequence and gates in the nested execution plan still apply.
+The product owner's 2026-09-11 platform decision supersedes older Hostinger/MySQL and AWS-first wording in the nested
+context repository. Use Vercel with two isolated Supabase/PostgreSQL projects: one corporate and one clinical. Configure
+Vercel Functions and both Supabase projects in Singapore. Free tiers are synthetic-data development/preview only; they
+are prohibited for real-person, payment, assessment, or clinical production use. The controlling records are
+`docs/decisions/launch-configuration.md` and `docs/decisions/deployment-trajectory.md`. Sequence and human gates in the
+nested execution plan still apply.
 
 ## Start here
 

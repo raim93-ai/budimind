@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     # Database
     CLINICAL_DATABASE_URL: str = (
-        "mysql+asyncmy://clinical_app:clinical_dev@localhost:3307/budimind_clinical"
+        "postgresql+asyncpg://clinical_app:clinical_dev@localhost:5433/budimind_clinical"
     )
 
     # CORS
