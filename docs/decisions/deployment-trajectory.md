@@ -1,7 +1,7 @@
 # Vercel + Supabase Deployment Trajectory
 
-Status: ACTIVE — supersedes Hostinger/MySQL/AWS deployment wording  
-Decision date: 2026-09-11  
+Status: ACTIVE — supersedes Hostinger/MySQL/AWS deployment wording
+Decision date: 2026-09-11
 Scope: G0–G3 and Stages 0–3
 
 ## Non-negotiable platform shape
