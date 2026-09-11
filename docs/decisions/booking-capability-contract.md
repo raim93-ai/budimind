@@ -1,8 +1,7 @@
 # Booking Capability Contract
 
-Status: APPROVED PRODUCT BASELINE FOR SYNTHETIC IMPLEMENTATION
-Reference model: Amelia feature categories; implementation remains a BudiMind-owned Next.js/FastAPI/MySQL system
-Last reviewed: 2026-09-11
+Status: APPROVED PRODUCT BASELINE FOR SYNTHETIC IMPLEMENTATION Reference model: Amelia feature categories;
+implementation remains a BudiMind-owned Next.js/FastAPI/MySQL system Last reviewed: 2026-09-11
 
 “Like Amelia” means clinically relevant capability parity, not a WordPress dependency or a blind clone. The BudiMind
 database is authoritative for availability, booking, consent, payment and audit. Calendar, WhatsApp, email, video and

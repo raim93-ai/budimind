@@ -1,7 +1,6 @@
 # G0–G3 Readiness and Approval Contract
 
-Status: ACTIVE CONTROL
-Last reviewed: 2026-09-11
+Status: ACTIVE CONTROL Last reviewed: 2026-09-11
 
 This register prevents a plan, test stub, vendor website, or AI recommendation from being mistaken for approval. A gate
 passes only when every mandatory row has a named accountable human, a dated evidence link, and no blocking finding.
