@@ -21,7 +21,7 @@ client-authorised referral handoff or opaque benefit-entitlement check.
 ## Architecture
 
 ```
-CloudFront + WAF
+Hostinger Malaysia edge/runtime
        |
        +---------------- Corporate/Analysis ----------------+
        |  corporate-web -> corporate-api -> corporate-db    |
@@ -83,13 +83,12 @@ budimind/
 
 - **Web target**: Next.js 16 Active LTS + React 19 + strict TypeScript
 - **API target**: FastAPI + Python 3.13 + Pydantic 2 + SQLAlchemy 2.x + Alembic
-- **Database**: PostgreSQL (separate instances for corporate/clinical)
-- **Queue**: SQS (LocalStack for local dev)
-- **Storage**: S3 (LocalStack for local dev)
-- **Identity**: managed OIDC selected after launch-market/vendor review; server-side sessions and privileged-role MFA
-- **Infrastructure**: Terraform + AWS (ECS Fargate, CloudFront, ALB, RDS)
-- **CI/CD**: GitHub Actions with OIDC-based AWS deployment
-- **Observability**: CloudWatch + OpenTelemetry + structured JSON logging
+- **Database**: MySQL 8 (separate corporate and clinical databases/users)
+- **Queue/storage**: add durable providers only when the implementing stage requires them
+- **Identity**: Auth0 Australia, conditional on contract/TIA; server-side sessions and privileged-role MFA
+- **Infrastructure**: Hostinger Enterprise Malaysia; AWS `ap-southeast-5` later for approved email/backup/security use
+- **CI/CD**: GitHub Actions with protected deployment environments
+- **Observability**: structured redacted logs; Sentry EU only after contract/TIA
 - **Assurance targets**: OWASP ASVS 5.0, NIST SSDF, and WCAG 2.2 AA
 
 The checked-in manifests were upgraded from the old prototype toolchain. Stage `S00-T02` records the lockfile and

@@ -1,48 +1,64 @@
 services:
-  # Corporate PostgreSQL Database
   corporate-db:
-    image: postgres:17-alpine
+    image: mysql:8.4.6
     container_name: budimind-corporate-db
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --sql-mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+      - --default-time-zone=+00:00
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: budimind_corporate
+      MYSQL_DATABASE: budimind_corporate
+      MYSQL_USER: corporate_app
+      MYSQL_PASSWORD: corporate_dev
+      MYSQL_ROOT_PASSWORD: corporate_root_dev
+      MYSQL_INITDB_SKIP_TZINFO: '1'
     ports:
-      - '5432:5432'
+      - '3306:3306'
     volumes:
-      - corporate-db-data:/var/lib/postgresql/data
+      - corporate-db-data:/var/lib/mysql
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d budimind_corporate']
+      test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -u corporate_app -pcorporate_dev --silent']
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 12
+      start_period: 20s
     networks:
-      - budimind-network
+      - corporate-network
 
-  # Clinical PostgreSQL Database
   clinical-db:
-    image: postgres:17-alpine
+    image: mysql:8.4.6
     container_name: budimind-clinical-db
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --sql-mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+      - --default-time-zone=+00:00
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: budimind_clinical
+      MYSQL_DATABASE: budimind_clinical
+      MYSQL_USER: clinical_app
+      MYSQL_PASSWORD: clinical_dev
+      MYSQL_ROOT_PASSWORD: clinical_root_dev
+      MYSQL_INITDB_SKIP_TZINFO: '1'
     ports:
-      - '5433:5432'
+      - '3307:3306'
     volumes:
-      - clinical-db-data:/var/lib/postgresql/data
+      - clinical-db-data:/var/lib/mysql
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d budimind_clinical']
+      test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -u clinical_app -pclinical_dev --silent']
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 12
+      start_period: 20s
     networks:
-      - budimind-network
+      - clinical-network
 
 volumes:
   corporate-db-data:
   clinical-db-data:
 
 networks:
-  budimind-network:
-    driver: bridge
+  corporate-network:
+    internal: true
+  clinical-network:
+    internal: true

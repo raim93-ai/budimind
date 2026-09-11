@@ -1,24 +1,21 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { Navbar, Footer, CrisisSupport } from '@budimind/ui';
+import { Navbar, Footer } from '@budimind/ui';
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#1A365D' },
-    { media: '(prefers-color-scheme: dark)', color: '#1A202C' },
-  ],
+  themeColor: [{ color: '#f7f5ef' }],
 };
 
 export const metadata: Metadata = {
   title: {
-    default: 'BudiMind Clinic — Mental Health Support',
+    default: 'BudiMind — Psychology services in Kuala Lumpur',
     template: '%s | BudiMind Clinic',
   },
   description:
-    'Verified clinical psychologists, flexible booking, and confidential care. Available for individuals and employer-supported employees.',
+    'BudiMind is preparing psychology services for adults online and in Desa Melawati, Kuala Lumpur.',
   keywords: [
     'mental health',
     'psychologist',
@@ -32,20 +29,12 @@ export const metadata: Metadata = {
     'clinical psychology',
   ],
   authors: [{ name: 'BudiMind' }],
-  openGraph: {
-    type: 'website',
-    locale: 'en-US',
-    url: 'https://clinic.budimind.com',
-    siteName: 'BudiMind Clinic',
-  },
-  twitter: { card: 'summary_large_image' },
-  alternates: { canonical: 'https://clinic.budimind.com' },
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
     googleBot: {
-      index: true,
-      follow: true,
+      index: false,
+      follow: false,
     },
   },
 };
@@ -57,7 +46,7 @@ const navLinks = [
   { label: 'Pricing', href: '/pricing' },
   { label: 'Book', href: '/book' },
   { label: 'About', href: '/about' },
-  { label: 'Blog', href: '/blog' },
+  { label: 'Resources', href: '/blog' },
   { label: 'Contact', href: '/contact' },
 ];
 
@@ -67,9 +56,9 @@ const footerColumns = [
     links: [
       { label: 'Find a Psychologist', href: '/psychologists' },
       { label: 'Our Services', href: '/services' },
-      { label: 'Book Appointment', href: '/book' },
+      { label: 'Booking status', href: '/book' },
       { label: 'Pricing', href: '/pricing' },
-      { label: 'My Appointments', href: '/appointments' },
+      { label: 'Client area', href: '/appointments' },
     ],
   },
   {
@@ -77,14 +66,14 @@ const footerColumns = [
     links: [
       { label: 'About', href: '/about' },
       { label: 'Our Psychologists', href: '/psychologists' },
-      { label: 'Blog', href: '/blog' },
+      { label: 'Resources', href: '/blog' },
       { label: 'Contact', href: '/contact' },
     ],
   },
   {
     title: 'Support',
     links: [
-      { label: 'Help Center', href: '/contact' },
+      { label: 'Contact status', href: '/contact' },
       { label: 'Privacy', href: '/privacy' },
       { label: 'Terms', href: '/terms' },
       { label: 'Accessibility', href: '/accessibility' },
@@ -93,8 +82,8 @@ const footerColumns = [
   {
     title: 'Crisis Support',
     links: [
-      { label: 'Befrienders Malaysia (15999)', href: 'https://www.befrienders.org.my' },
-      { label: 'Crisis Resources', href: '/contact' },
+      { label: 'Emergency services (999)', href: 'tel:999' },
+      { label: 'Talian HEAL (15555)', href: 'tel:15555' },
     ],
   },
 ];
@@ -102,39 +91,6 @@ const footerColumns = [
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        {/* Structured data for the organization */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'MedicalOrganization',
-              name: 'BudiMind Clinic',
-              url: 'https://clinic.budimind.com',
-              logo: 'https://clinic.budimind.com/logo.png',
-              description:
-                'Verified clinical psychologists, flexible booking, and confidential care.',
-              address: {
-                '@type': 'PostalAddress',
-                addressLocality: 'Kuala Lumpur',
-                addressCountry: 'MY',
-              },
-              contactPoint: [
-                {
-                  '@type': 'ContactPoint',
-                  telephone: '+60-11-1111-2222',
-                  email: 'care@budimind.com',
-                  contactType: 'customer service',
-                  areaServed: 'MY',
-                },
-              ],
-              medicalSpecialty: ['Clinical Psychology', 'Counselling Psychology', 'Mental Health'],
-              sameAs: ['https://www.befrienders.org.my', 'https://www.moh.gov.my'],
-            }),
-          }}
-        />
-      </head>
       <body className="flex flex-col min-h-screen">
         <a href="#main-content" className="skip-link">
           Skip to main content
@@ -145,13 +101,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <Footer
           brand="BudiMind Clinic"
-          tagline="Confidential Mental Health Care"
+          tagline="Psychology services · Pre-launch"
           columns={footerColumns}
         />
-        {/* Crisis support banner at the very bottom for immediate access */}
-        <div className="container py-6">
-          <CrisisSupport />
-        </div>
       </body>
     </html>
   );

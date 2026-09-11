@@ -4,6 +4,13 @@ This repository contains a safety-sensitive mental-health and workforce product.
 agent, including lower-capability agents. The detailed execution order is in
 `psychology-clinic-context/AI_DEPLOYMENT_EXECUTION_PLAN.md`.
 
+## Current architecture override
+
+The product owner's 2026-09-11 launch decision supersedes older PostgreSQL/AWS-first wording in the nested context
+repository: use two isolated MySQL 8 boundaries on the approved Hostinger Enterprise Malaysia service; create AWS later
+in `ap-southeast-5` for approved email, backup and security services. The complete controlling record is
+`docs/decisions/launch-configuration.md`. Sequence and gates in the nested execution plan still apply.
+
 ## Start here
 
 Before changing application, infrastructure, schema, or deployment code:

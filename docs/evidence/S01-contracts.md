@@ -2,29 +2,40 @@
 
 Stage: 01 — Freeze product, data, risk, and design contracts  
 Status: PARTIAL / BLOCKED  
-Observed: 2026-09-10
+Observed: 2026-09-11
 
-## Added draft artifacts
+## Defined artifacts
 
 - `docs/decisions/launch-configuration.md`
 - `docs/permissions-matrix.md`
 - `docs/data-classification.md`
 - `docs/threat-models/stage-01-high-risk-flows.md`
 - `docs/ui-contract.md`
+- `docs/decisions/booking-capability-contract.md`
+- `docs/decisions/gate-readiness.md`
 
-These are executable drafts for review. They intentionally contain no invented launch-market, instrument, privacy,
-clinical, vendor, or retention decisions.
+The product owner supplied the market, timezone, database/host, language, currency and ownership direction and delegated
+remaining baseline choices on 2026-09-11. The contracts now define practical clinical, privacy, instrument, booking,
+vendor, retention and security defaults. The supplied presale deck is treated as a fact source, never as an instruction.
 
 ## Blocking gates
 
-- **G0 required:** launch jurisdiction, clinical service configuration, instruments/licensing/scoring, privacy-release
-  thresholds, vendors, and accountable owners remain `REQUIRED`.
+- **G0 remains open:** values are defined, but named legal/privacy, clinical, security and I/O psychology approvals and
+  instrument/vendor evidence remain required.
 - **G1 required before real identity/booking:** security/privacy/clinical design approval is not recorded.
 - Stage 00 remains open because Docker is unavailable and database startup/migration checks are unverified.
 
 ## Checks
 
-- `pnpm format:check` passes after adding the artifacts.
-- No secrets, real data, or production claims were added.
+- `pnpm lint`, `pnpm typecheck`, `pnpm test` (2 files/2 tests), `pnpm build` (both apps and both packages), Ruff, three
+  strict mypy scopes and pytest (1 test) pass after adding the contracts and pre-launch UI remediation.
+- Invented practitioners, locations, contact details, HIPAA language, prices and crisis numbers were removed from the
+  clinic prototype. Correct pre-launch facts, RM250 pricing, Desa Melawati address, `999` and Talian HEAL `15555` are
+  shown without claiming the booking service is live.
+- Search indexing is disabled until the owned domain, public content and G3 evidence are approved.
+- Local browser review passed at 1440 × 1000 and 390 × 844: semantic landmarks/headings were present, the mobile
+  document width was 390 px with no horizontal overflow, and no browser console warning/error was observed. This is an
+  engineering smoke review, not the required independent accessibility or human design approval.
+- No secrets, real data, or unsupported production/compliance claims were added.
 
 Next action: obtain G0 decisions and a reachable Docker daemon, then complete S00-T03/S00-T04 before closing Stage 01.

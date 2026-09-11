@@ -1,52 +1,36 @@
 import type { Metadata } from 'next';
-import { Section, CTASection, EvidenceDisclaimer } from '@budimind/ui';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Book an Appointment | BudiMind Clinic',
-  description:
-    'Book a confidential session with a verified clinical psychologist. Choose online or in-person at our Shah Alam or Subang Jaya clinics.',
-  alternates: { canonical: 'https://clinic.budimind.com/book' },
+  title: 'Booking',
+  description: 'BudiMind booking pre-launch status.',
+  robots: { index: false, follow: false },
 };
 
 export default function BookPage() {
   return (
-    <>
-      <Section
-        title="Book a Confidential Session"
-        subtitle="Select your clinician and time slot. Sessions are available online or in-person."
-        center
-      >
-        <div className="max-w-lg mx-auto">
-          <div className="p-6 bg-gray-50 dark:bg-gray-900/40 rounded-xl border border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-secondary mb-4">
-              Booking is completed through our secure scheduler. For a quick, no-obligation match we
-              recommend starting with a consultation.
-            </p>
-            <a
-              href="/psychologists"
-              className="inline-block w-full px-6 py-3 bg-accent text-white rounded-lg font-medium hover:opacity-90 transition-opacity text-center"
-            >
-              Find a Psychologist First
-            </a>
-          </div>
-        </div>
-      </Section>
-
-      {/* Evidence-based disclaimer on booking page */}
-      <Section center>
-        <div className="max-w-3xl mx-auto">
-          <EvidenceDisclaimer />
-        </div>
-      </Section>
-
-      <CTASection
-        title="Need help booking?"
-        description="Email us or call and we'll arrange a session at your convenience."
-        actions={[
-          { label: 'Contact Us', href: '/contact' },
-          { label: 'View Pricing', href: '/pricing', variant: 'secondary' },
-        ]}
-      />
-    </>
+    <section className="py-20 sm:py-28">
+      <div className="container max-w-3xl">
+        <p className="text-sm font-semibold tracking-wide text-teal-800">BOOKING</p>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+          Booking will open after verification.
+        </h1>
+        <p className="mt-6 text-lg leading-8 text-slate-600">
+          The production scheduler is not active. It will open only when practitioner credentials,
+          service scope, consent, privacy, payment, calendar, notifications and clinical escalation
+          have current approval and test evidence.
+        </p>
+        <p className="mt-8 border-l-2 border-amber-600 bg-amber-50 p-5 text-sm leading-6 text-amber-950">
+          Do not send clinical information through email or WhatsApp. BudiMind is not an emergency
+          service; call 999 for immediate danger or Talian HEAL at 15555.
+        </p>
+        <Link
+          className="mt-8 inline-block font-semibold text-teal-800 underline underline-offset-4"
+          href="/services"
+        >
+          Review the planned service
+        </Link>
+      </div>
+    </section>
   );
 }

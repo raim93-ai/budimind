@@ -1,101 +1,54 @@
 import type { Metadata } from 'next';
-import { Section, CTASection, EvidenceDisclaimer } from '@budimind/ui';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Pricing | BudiMind Clinic',
-  description:
-    'Transparent pricing for mental health services. Pay per session or use your employer benefits.',
-  alternates: { canonical: 'https://clinic.budimind.com/pricing' },
+  title: 'Pricing',
+  description: 'BudiMind individual session pricing.',
 };
 
-const packages = [
-  {
-    name: 'Single Session',
-    description: 'One confidential session with a licensed psychologist.',
-    price: 'RM 350',
-    features: ['50-minute session', 'Secure video or in-person', 'Aftercare notes'],
-    cta: 'Book Now',
-    ctaHref: '/book',
-  },
-  {
-    name: '5-Session Package',
-    description: 'A short, focused programme for specific concerns.',
-    price: 'RM 1,550',
-    features: ['Five 50-minute sessions', 'Progress review', 'Flexible scheduling'],
-    cta: 'Book Now',
-    ctaHref: '/book',
-    featured: true,
-  },
-  {
-    name: 'Employer Covered',
-    description: "Full coverage through your organisation's benefits plan.",
-    price: 'Covered',
-    features: ['No out-of-pocket', 'All clinicians', 'Priority scheduling'],
-    cta: 'Check Coverage',
-    ctaHref: '/contact',
-  },
-];
+const offers = [
+  ['Single session', 'RM250', 'One 50-minute individual appointment.'],
+  ['Five sessions', 'RM1,250', 'Use within six months after the first session.'],
+  ['Ten sessions', 'RM2,500', 'Use within twelve months after the first session.'],
+] as const;
 
 export default function PricingPage() {
   return (
-    <>
-      <Section
-        title="Pricing"
-        subtitle="Transparent, upfront pricing. Pay per session or use your employer benefits."
-        center
-      >
-        <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
-          {packages.map((pkg) => (
-            <div
-              key={pkg.name}
-              className={`p-8 rounded-xl border flex flex-col ${
-                pkg.featured
-                  ? 'border-primary bg-primary/5 dark:bg-primary/10'
-                  : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
-              }`}
-            >
-              <h3 className="text-xl font-bold text-primary mb-1">{pkg.name}</h3>
-              <p className="text-sm text-secondary mb-6">{pkg.description}</p>
-              <div className="mb-6">
-                <span className="text-3xl font-bold text-primary">{pkg.price}</span>
+    <section className="py-20 sm:py-28">
+      <div className="container max-w-5xl">
+        <p className="text-sm font-semibold tracking-wide text-teal-800">INDIVIDUAL CARE</p>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+          Simple pricing, before you commit.
+        </h1>
+        <div className="mt-12 divide-y divide-stone-200 border-y border-stone-200">
+          {offers.map(([name, price, detail]) => (
+            <article className="grid gap-2 py-7 sm:grid-cols-[1fr_auto] sm:items-center" key={name}>
+              <div>
+                <h2 className="text-xl font-semibold text-slate-950">{name}</h2>
+                <p className="mt-1 text-slate-600">{detail}</p>
               </div>
-              <ul className="text-sm space-y-2 text-secondary mb-6 flex-1">
-                {pkg.features.map((f) => (
-                  <li key={f}>✓ {f}</li>
-                ))}
-              </ul>
-              <a
-                href={pkg.ctaHref}
-                className={`mt-auto px-6 py-2 rounded-lg font-medium text-center ${
-                  pkg.featured
-                    ? 'bg-accent text-white hover:opacity-90'
-                    : 'bg-primary text-white hover:opacity-90'
-                }`}
-              >
-                {pkg.cta}
-              </a>
-            </div>
+              <p className="text-2xl font-semibold tracking-tight text-slate-950">{price}</p>
+            </article>
           ))}
         </div>
-      </Section>
-
-      {/* Evidence-based disclaimer on pricing page */}
-      <Section center>
-        <div className="max-w-3xl mx-auto">
-          <EvidenceDisclaimer
-            text="Pricing is subject to change. Insurance and employer benefit coverage
-          varies by plan. Please contact us to verify your coverage before booking. These
-          services are for informational purposes and are not a substitute for emergency
-          medical or psychiatric care."
-          />
+        <div className="mt-10 max-w-3xl text-sm leading-6 text-slate-600">
+          <p>
+            Founding-member prices are RM1,000 for five sessions and RM2,000 for ten sessions,
+            subject to written eligibility, capacity, expiry and presale terms.
+          </p>
+          <p className="mt-4">
+            Cancel or reschedule at least 24 hours before an appointment for a credit or eligible
+            refund. Late cancellation and non-attendance normally use one credit, with emergency and
+            clinical discretion exceptions. Exact tax and refund terms are shown before payment.
+          </p>
         </div>
-      </Section>
-
-      <CTASection
-        title="Have more questions?"
-        description="We're here to help — contact us for a no-obligation chat."
-        actions={[{ label: 'Contact Us', href: '/contact' }]}
-      />
-    </>
+        <Link
+          className="mt-8 inline-block rounded-md bg-slate-950 px-5 py-3 font-medium text-white"
+          href="/contact"
+        >
+          Register your interest
+        </Link>
+      </div>
+    </section>
   );
 }

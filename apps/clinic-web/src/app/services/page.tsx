@@ -1,67 +1,56 @@
 import type { Metadata } from 'next';
-import { Section, FeatureGrid, EvidenceDisclaimer, PsychologyResources } from '@budimind/ui';
 
 export const metadata: Metadata = {
-  title: 'Services | BudiMind Clinic',
-  description:
-    'Confidential mental health services for individuals and employer-supported employees. Online and in-person sessions.',
-  alternates: { canonical: 'https://clinic.budimind.com/services' },
+  title: 'Services',
+  description: 'BudiMind launch service scope.',
 };
-
-const services = [
-  {
-    title: 'Individual Therapy',
-    description:
-      'One-on-one sessions with a licensed psychologist for anxiety, depression, trauma, and more.',
-  },
-  {
-    title: 'Couples Counselling',
-    description: 'Strengthen relationships through guided, confidential communication sessions.',
-  },
-  {
-    title: 'Employer Benefits',
-    description: 'EAP-aligned programmes seamlessly integrated with your benefits provider.',
-  },
-  {
-    title: 'Online Sessions',
-    description: 'Secure video consultations from the comfort of your own space.',
-  },
-  {
-    title: 'In-Person Care',
-    description: 'Face-to-face support at our Shah Alam and Subang Jaya clinics.',
-  },
-  {
-    title: 'Crisis Support',
-    description: '24/7 access to crisis resources and urgent-care pathways when you need them.',
-  },
-];
 
 export default function ServicesPage() {
   return (
-    <>
-      <Section
-        title="Our Services"
-        subtitle="Confidential, evidence-based mental health support — online and in-person."
-        center
-      >
-        <FeatureGrid features={services} />
-      </Section>
-
-      {/* Evidence-based disclaimer */}
-      <Section center>
-        <div className="max-w-3xl mx-auto">
-          <EvidenceDisclaimer />
+    <section className="py-20 sm:py-28">
+      <div className="container max-w-5xl">
+        <p className="text-sm font-semibold tracking-wide text-teal-800">LAUNCH SCOPE</p>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+          Clear care boundaries from the start.
+        </h1>
+        <div className="mt-12 grid gap-10 md:grid-cols-2">
+          <article className="border-t border-slate-900 pt-5">
+            <h2 className="text-xl font-semibold">Individual sessions</h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              50-minute psychological therapy or counselling appointments for adults aged 18 and
+              above, subject to practitioner competence and clinical suitability.
+            </p>
+          </article>
+          <article className="border-t border-slate-900 pt-5">
+            <h2 className="text-xl font-semibold">Online in Malaysia</h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              Secure video sessions for clients physically in Malaysia. Identity, consent, location,
+              privacy and an emergency plan are checked.
+            </p>
+          </article>
+          <article className="border-t border-slate-900 pt-5">
+            <h2 className="text-xl font-semibold">Desa Melawati</h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              In-person appointments are planned at No. 15, Jalan 3/4C, Desa Melawati, Kuala Lumpur,
+              after the centre is operationally approved.
+            </p>
+          </article>
+          <article className="border-t border-slate-900 pt-5">
+            <h2 className="text-xl font-semibold">Not an emergency service</h2>
+            <p className="mt-3 leading-7 text-slate-600">
+              BudiMind does not provide emergency care, prescribing or crisis response. Call 999 for
+              immediate danger or Talian HEAL at 15555.
+            </p>
+          </article>
         </div>
-      </Section>
-
-      {/* Psychology resources */}
-      <div className="container pb-12">
-        <PsychologyResources
-          title="Learn More About Mental Health"
-          intro="Our services are grounded in evidence-based psychological practice. These authoritative sources
-          provide additional information on the conditions we treat and the approaches we use:"
-        />
+        <div className="mt-14 bg-stone-100 p-6">
+          <h2 className="font-semibold text-slate-950">Not offered at launch</h2>
+          <p className="mt-2 leading-7 text-slate-600">
+            Minors, couples/family work, group therapy, formal autism assessment and Soul Reset
+            require separate clinical governance before they can be offered.
+          </p>
+        </div>
       </div>
-    </>
+    </section>
   );
 }

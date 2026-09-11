@@ -7,3 +7,4 @@ tmp/
 .uv-python/
 .venv/
 psychology-clinic-context/.git/
+**/next-env.d.ts

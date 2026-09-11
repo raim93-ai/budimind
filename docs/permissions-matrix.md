@@ -1,7 +1,7 @@
-# BudiMind Permission Contract (Stage 01 Draft)
+# BudiMind Permission Contract
 
-Status: DRAFT — G1 approval required  
-Rule: deny by default; API policies, database queries, and tests must enforce this matrix.
+Status: BASELINE DEFINED — named G1 approval required Rule: deny by default; API policies, database queries, and tests
+must enforce this matrix.
 
 | Role                   | Plane              | Allowed scope                                                                              | Explicitly denied                                                                                             |
 | ---------------------- | ------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
@@ -14,6 +14,8 @@ Rule: deny by default; API policies, database queries, and tests must enforce th
 | I/O analyst            | Corporate/Analysis | Assigned tenant/campaign, approved purpose, pseudonymous response analysis, release draft  | Clinical plane, treating-CP records, unrestricted export, sponsor release approval unless separately assigned |
 | Privacy reviewer       | Corporate/Analysis | Release candidates, suppression/differencing checks, approval/rejection, audit             | Clinical plane, unapproved raw analysis outside purpose                                                       |
 | Platform administrator | Operations         | Infrastructure and operational metadata required for support                               | Routine content, survey answers, clinical notes, therapy records                                              |
+| Support administrator  | Operations         | Account and delivery metadata required to resolve a documented support case                | Clinical content, assessment answers, employer responses, credentials/secrets, unrestricted impersonation     |
+| Incident responder     | Operations         | Time-bound, approved incident metadata and containment actions                             | Unrecorded content access, routine clinical/corporate browsing, permanent emergency privilege                 |
 
 Every sensitive action must carry actor, tenant, plane, purpose/assignment or care relationship, resource, decision, and
 audit event. A UI hide is never an authorization control.
@@ -23,3 +25,6 @@ audit event. A UI hide is never an authorization control.
 For each protected endpoint and query, test wrong role, wrong tenant, missing/expired purpose, missing care
 relationship, wrong plane, revoked consent, released/unreleased state, replayed token, and unauthorised export.
 Responses must be generic and must not reveal whether a protected resource exists.
+
+Privileged support or incident access requires a ticket/incident, purpose, expiry, step-up authentication, explicit
+approval, append-only audit and post-event review. There is no standing “super-admin” content role.

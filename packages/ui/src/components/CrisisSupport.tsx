@@ -24,23 +24,18 @@ export const crisisResources: {
 } = {
   malaysia: [
     {
-      name: 'Befrienders Malaysia',
-      phone: '15999',
-      phoneDisplay: '15999',
-      url: 'https://www.befrienders.org.my',
-      description: '24/7 emotional support helpline for anyone in distress.',
-    },
-    {
-      name: 'Talian Kasih',
-      phone: '016-2387888',
-      phoneDisplay: '016-2387888',
-      url: 'https://www.kpwj.gov.my',
-      description: 'Child and adolescent mental health helpline.',
-    },
-    {
-      name: 'Ministry of Health Mental Health Division',
+      name: 'Emergency services',
+      phone: '999',
+      phoneDisplay: '999',
       url: 'https://www.moh.gov.my',
-      description: 'National mental health policies, resources, and professional referrals.',
+      description: 'For immediate danger or a life-threatening emergency.',
+    },
+    {
+      name: 'Talian HEAL',
+      phone: '15555',
+      phoneDisplay: '15555',
+      url: 'https://jknselangor.moh.gov.my/htar/en/pengumuman-awam/661-talian-heal-15555',
+      description: 'Ministry of Health mental-health support line.',
     },
   ],
   global: [
@@ -97,7 +92,7 @@ export function CrisisSupport({ compact = false, className = '', ...props }: Cri
           <div className="space-y-3">
             <div>
               <p className="text-xs font-semibold text-red-900 dark:text-red-200 uppercase tracking-wide">
-                Malaysia (24/7)
+                Malaysia
               </p>
               <ul className="mt-1 space-y-1" role="list">
                 {crisisResources.malaysia.map((r) => (

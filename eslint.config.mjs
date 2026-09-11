@@ -59,6 +59,7 @@ export default [
       '.next/',
       '.next/**',
       'apps/**/.next/**',
+      'apps/**/next-env.d.ts',
       '*.config.js',
       '*.config.ts',
       'pnpm-lock.yaml',

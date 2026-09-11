@@ -1,3 +1,6 @@
+from typing import Self
+
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -7,15 +10,26 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
 
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5433/budimind_clinical"
+    CLINICAL_DATABASE_URL: str = (
+        "mysql+asyncmy://clinical_app:clinical_dev@localhost:3307/budimind_clinical"
+    )
 
     # CORS
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:3001"]
 
     # Security
-    SECRET_KEY: str = "dev-secret-key-change-in-production"
+    CLINICAL_SECRET_KEY: str = "dev-secret-key-change-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    @model_validator(mode="after")
+    def reject_local_production_configuration(self) -> Self:
+        if self.ENVIRONMENT == "production":
+            if "localhost" in self.CLINICAL_DATABASE_URL:
+                raise ValueError("Production clinical database cannot use localhost")
+            if self.CLINICAL_SECRET_KEY.startswith("dev-"):
+                raise ValueError("Production clinical secret is not configured")
+        return self
 
     model_config = SettingsConfigDict(
         env_file=".env",

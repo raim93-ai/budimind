@@ -8,7 +8,7 @@
     "format": "prettier --write README.md AGENTS.md package.json pnpm-workspace.yaml tsconfig.json eslint.config.mjs .prettierrc compose.yaml \"apps/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"packages/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"docs/**/*.md\" \"psychology-clinic-context/**/*.{md,json}\"",
     "lint": "eslint \"**/*.{ts,tsx}\" --max-warnings 0",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --dir packages",
     "test:e2e": "playwright test",
     "build:web": "pnpm --filter corporate-web build && pnpm --filter clinic-web build",
     "build:packages": "pnpm --filter ui build && pnpm --filter contracts build",

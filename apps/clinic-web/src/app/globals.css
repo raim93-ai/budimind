@@ -22,16 +22,6 @@
     --radius-lg: 12px;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-primary: #6B46C1;
-      --color-secondary: #A0AEC0;
-      --color-accent: #4299E1;
-      --color-background: #1A202C;
-      --color-text: #E2E8F0;
-    }
-  }
-
   * {
     box-sizing: border-box;
     margin: 0;

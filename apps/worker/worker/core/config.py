@@ -10,12 +10,12 @@ class Settings(BaseSettings):
 
     # Corporate Database
     CORPORATE_DATABASE_URL: str = (
-        "postgresql+asyncpg://postgres:postgres@localhost:5432/budimind_corporate"
+        "mysql+asyncmy://corporate_worker:corporate_worker_dev@localhost:3306/budimind_corporate"
     )
 
     # Clinical Database
     CLINICAL_DATABASE_URL: str = (
-        "postgresql+asyncpg://postgres:postgres@localhost:5433/budimind_clinical"
+        "mysql+asyncmy://clinical_worker:clinical_worker_dev@localhost:3307/budimind_clinical"
     )
 
     # Redis
