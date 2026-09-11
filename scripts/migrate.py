@@ -9,7 +9,6 @@ from datetime import UTC, datetime
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
-
 MIGRATION = "0001_baseline"
 
 
