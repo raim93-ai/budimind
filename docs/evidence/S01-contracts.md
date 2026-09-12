@@ -1,8 +1,7 @@
 # Stage 01 Contract Evidence
 
 Stage: 01 — Freeze product, data, risk, and design contracts  
-Status: PARTIAL / G0-G1 APPROVAL GATE
-Observed: 2026-09-12
+Status: PARTIAL / G0-G1 APPROVAL GATE — Observed: 2026-09-12
 
 ## Defined artifacts
 
