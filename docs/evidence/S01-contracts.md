@@ -1,8 +1,8 @@
 # Stage 01 Contract Evidence
 
 Stage: 01 — Freeze product, data, risk, and design contracts  
-Status: PARTIAL / BLOCKED  
-Observed: 2026-09-11
+Status: PARTIAL / G0-G1 APPROVAL GATE
+Observed: 2026-09-12
 
 ## Defined artifacts
 
@@ -23,12 +23,13 @@ vendor, retention and security defaults. The supplied presale deck is treated as
 - **G0 remains open:** values are defined, but named legal/privacy, clinical, security and I/O psychology approvals and
   instrument/vendor evidence remain required.
 - **G1 required before real identity/booking:** security/privacy/clinical design approval is not recorded.
-- Stage 00 remains open because Docker is unavailable and database startup/migration checks are unverified.
+- Stage 00 is complete locally. Cloud project creation and Vercel linking are intentionally deferred until account
+  credentials are supplied.
 
 ## Checks
 
-- `pnpm lint`, `pnpm typecheck`, `pnpm test` (2 files/2 tests), `pnpm build` (both apps and both packages), Ruff, three
-  strict mypy scopes and pytest (1 test) pass after adding the contracts and pre-launch UI remediation.
+- `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:integration`, `pnpm test:e2e`, `pnpm build`, Ruff, mypy and
+  pytest pass after adding the contracts and pre-launch UI remediation.
 - Invented practitioners, locations, contact details, HIPAA language, prices and crisis numbers were removed from the
   clinic prototype. Correct pre-launch facts, RM250 pricing, Desa Melawati address, `999` and Talian HEAL `15555` are
   shown without claiming the booking service is live.
