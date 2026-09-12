@@ -136,3 +136,8 @@ htmlcov/
 
 # Local development
 .local/
+**/next-env.d.ts
+**/AGENTS.md
+**/CLAUDE.md
+**/test-results/**
+/nul
