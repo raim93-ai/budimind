@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "datasetId": "g2-corporate-synthetic-v1",
+    "synthetic": true,
+    "allowedEnvironments": ["development", "test"],
+    "externalSideEffects": false,
+    "timezone": "Asia/Kuala_Lumpur",
+    "generatedAt": "2026-09-12T00:00:00Z"
+  },
+  "actors": [
+    {
+      "id": "corp_actor_employee_001",
+      "role": "employee",
+      "displayName": "Synthetic Employee 01",
+      "email": "employee.001@g2.example.invalid",
+      "emailVerified": true,
+      "mfaEnrolled": false
+    },
+    {
+      "id": "corp_actor_sponsor_001",
+      "role": "sponsor",
+      "displayName": "Synthetic Sponsor 01",
+      "email": "sponsor.001@g2.example.invalid",
+      "emailVerified": true,
+      "mfaEnrolled": true
+    },
+    {
+      "id": "corp_actor_analyst_001",
+      "role": "io_psychologist",
+      "displayName": "Synthetic I/O Analyst 01",
+      "email": "analyst.001@g2.example.invalid",
+      "emailVerified": true,
+      "mfaEnrolled": true
+    },
+    {
+      "id": "corp_actor_privacy_001",
+      "role": "privacy_reviewer",
+      "displayName": "Synthetic Privacy Reviewer 01",
+      "email": "privacy.001@g2.example.invalid",
+      "emailVerified": true,
+      "mfaEnrolled": true
+    },
+    {
+      "id": "corp_actor_platform_001",
+      "role": "platform_operations",
+      "displayName": "Synthetic Platform Operations 01",
+      "email": "platform.001@g2.example.invalid",
+      "emailVerified": true,
+      "mfaEnrolled": true
+    }
+  ],
+  "tenants": [
+    {
+      "id": "corp_tenant_001",
+      "name": "Synthetic Organisation 01",
+      "status": "test_active"
+    }
+  ],
+  "campaigns": [
+    {
+      "id": "corp_campaign_001",
+      "tenantId": "corp_tenant_001",
+      "instrumentVersion": "SYNTHETIC-NONCLINICAL-3-v1",
+      "language": "en",
+      "purpose": "g2_uat_only",
+      "status": "closed",
+      "minimumCohort": 10,
+      "participantCount": 12
+    }
+  ],
+  "submissions": [
+    {
+      "id": "corp_submission_001",
+      "campaignId": "corp_campaign_001",
+      "participantActorId": "corp_actor_employee_001",
+      "answers": [2, 3, 4],
+      "submittedAt": "2026-09-10T02:00:00Z"
+    }
+  ],
+  "releaseCandidates": [
+    {
+      "id": "corp_release_001",
+      "campaignId": "corp_campaign_001",
+      "status": "approved_synthetic",
+      "cohortSize": 12,
+      "suppressed": false,
+      "aggregate": { "mean": 3, "scaleMinimum": 1, "scaleMaximum": 5 },
+      "analystActorId": "corp_actor_analyst_001",
+      "privacyReviewerActorId": "corp_actor_privacy_001"
+    },
+    {
+      "id": "corp_release_small_cohort_001",
+      "campaignId": "corp_campaign_001",
+      "status": "blocked_synthetic",
+      "cohortSize": 4,
+      "suppressed": true,
+      "aggregate": null,
+      "analystActorId": "corp_actor_analyst_001",
+      "privacyReviewerActorId": "corp_actor_privacy_001"
+    }
+  ]
+}

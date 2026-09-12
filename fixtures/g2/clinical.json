@@ -1,0 +1,84 @@
+{
+  "metadata": {
+    "datasetId": "g2-clinical-synthetic-v1",
+    "synthetic": true,
+    "allowedEnvironments": ["development", "test"],
+    "externalSideEffects": false,
+    "timezone": "Asia/Kuala_Lumpur",
+    "generatedAt": "2026-09-12T00:00:00Z"
+  },
+  "actors": [
+    {
+      "id": "cln_actor_visitor_001",
+      "role": "public_visitor",
+      "displayName": "Synthetic Visitor 01"
+    },
+    {
+      "id": "cln_actor_client_001",
+      "role": "client",
+      "displayName": "Synthetic Client 01",
+      "email": "client.001@g2.example.invalid",
+      "emailVerified": true,
+      "mfaEnrolled": false
+    },
+    {
+      "id": "cln_actor_cp_001",
+      "role": "cp",
+      "displayName": "Synthetic Clinician 01",
+      "email": "clinician.001@g2.example.invalid",
+      "emailVerified": true,
+      "mfaEnrolled": true
+    },
+    {
+      "id": "cln_actor_ops_001",
+      "role": "clinical_operations",
+      "displayName": "Synthetic Clinical Operations 01",
+      "email": "clinical.ops.001@g2.example.invalid",
+      "emailVerified": true,
+      "mfaEnrolled": true
+    }
+  ],
+  "professionalProfiles": [
+    {
+      "id": "cln_profile_001",
+      "actorId": "cln_actor_cp_001",
+      "slug": "synthetic-clinician-01",
+      "credential": {
+        "registrationNumber": "TEST-MAHPC-0001",
+        "practisingCertificate": "TEST-APC-0001",
+        "status": "synthetic_verified",
+        "expiresOn": "2027-12-31",
+        "indemnityVerified": true
+      },
+      "services": ["synthetic_adult_individual_session"],
+      "languages": ["en", "ms"],
+      "modalities": ["in_person", "online"],
+      "publicationState": "published_test_only"
+    }
+  ],
+  "availability": [
+    {
+      "id": "cln_slot_001",
+      "professionalProfileId": "cln_profile_001",
+      "startsAt": "2026-10-05T01:00:00Z",
+      "endsAt": "2026-10-05T01:50:00Z",
+      "sourceTimezone": "Asia/Kuala_Lumpur",
+      "modality": "in_person",
+      "status": "held"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "cln_booking_001",
+      "clientActorId": "cln_actor_client_001",
+      "professionalProfileId": "cln_profile_001",
+      "slotId": "cln_slot_001",
+      "status": "confirmed",
+      "price": { "amountSen": 25000, "currency": "MYR" },
+      "consentVersion": "synthetic-consent-v1",
+      "paymentState": "synthetic_authorized",
+      "calendarState": "not_sent",
+      "notificationState": "not_sent"
+    }
+  ]
+}

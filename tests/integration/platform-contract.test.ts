@@ -27,4 +27,29 @@ describe('platform deployment contract', () => {
       expect(migration).not.toContain('service_role');
     }
   });
+
+  it('keeps G2 fixtures synthetic, isolated, and side-effect free', () => {
+    const clinical = JSON.parse(
+      readFileSync(resolve(root, 'fixtures', 'g2', 'clinical.json'), 'utf8')
+    ) as Record<string, unknown>;
+    const corporate = JSON.parse(
+      readFileSync(resolve(root, 'fixtures', 'g2', 'corporate.json'), 'utf8')
+    ) as Record<string, unknown>;
+
+    for (const fixture of [clinical, corporate]) {
+      const metadata = fixture.metadata as Record<string, unknown>;
+      expect(metadata.synthetic).toBe(true);
+      expect(metadata.allowedEnvironments).toEqual(['development', 'test']);
+      expect(metadata.externalSideEffects).toBe(false);
+
+      const serialized = JSON.stringify(fixture);
+      const emails = serialized.match(/[\w.-]+@[\w.-]+/g) ?? [];
+      expect(emails.length).toBeGreaterThan(0);
+      expect(emails.every((email) => email.endsWith('.example.invalid'))).toBe(true);
+    }
+
+    const clinicalIds = new Set(JSON.stringify(clinical).match(/cln_[a-z0-9_]+/g) ?? []);
+    const corporateIds = new Set(JSON.stringify(corporate).match(/corp_[a-z0-9_]+/g) ?? []);
+    expect([...clinicalIds].some((id) => corporateIds.has(id))).toBe(false);
+  });
 });

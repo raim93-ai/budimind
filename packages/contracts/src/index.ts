@@ -33,6 +33,8 @@ export enum CorporateRole {
   FACILITATOR = 'facilitator',
   IO_PSYCHOLOGIST = 'io_psychologist',
   CP_ANALYST = 'cp_analyst',
+  PRIVACY_REVIEWER = 'privacy_reviewer',
+  PLATFORM_OPERATIONS = 'platform_operations',
 }
 
 export enum CampaignStatus {
