@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     CORPORATE_DATABASE_URL: str = (
         "postgresql+asyncpg://corporate_app:corporate_dev@localhost:5432/budimind_corporate"
     )
+    CORPORATE_SUPABASE_URL: str = ""
+    CORPORATE_SUPABASE_PUBLISHABLE_KEY: str = ""
+    CORPORATE_SUPABASE_SECRET_KEY: str = ""
 
     # CORS
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:3001"]
@@ -20,8 +23,19 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def reject_local_production_configuration(self) -> Self:
         if self.ENVIRONMENT == "production":
-            if "localhost" in self.CORPORATE_DATABASE_URL:
+            if any(host in self.CORPORATE_DATABASE_URL for host in ("localhost", "127.0.0.1")):
                 raise ValueError("Production corporate database cannot use localhost")
+            if not self.CORPORATE_DATABASE_URL.startswith("postgresql+asyncpg://"):
+                raise ValueError("Production corporate database must use async PostgreSQL")
+            if not self.CORPORATE_SUPABASE_URL.startswith("https://"):
+                raise ValueError("Production Supabase URL must use HTTPS")
+            if (
+                not self.CORPORATE_SUPABASE_PUBLISHABLE_KEY
+                or not self.CORPORATE_SUPABASE_SECRET_KEY
+            ):
+                raise ValueError("Production Supabase keys must be configured as server secrets")
+            if any(origin.startswith("http://localhost") for origin in self.CORS_ORIGINS):
+                raise ValueError("Production CORS cannot include localhost")
         return self
 
     model_config = SettingsConfigDict(
