@@ -50,13 +50,13 @@ jobs:
         run: |
           pnpm format:check
           pnpm lint
+          pnpm build
           pnpm typecheck
           pnpm test
           pnpm test:integration
           pnpm python:lint
           pnpm python:typecheck
           pnpm python:test
-          pnpm build
 
       - name: Install browser
         run: pnpm --filter clinic-web exec playwright install --with-deps chromium
