@@ -46,17 +46,32 @@ jobs:
       - name: Verify schemas
         run: pnpm db:migrate
 
-      - name: Verify source
-        run: |
-          pnpm format:check
-          pnpm lint
-          pnpm build
-          pnpm typecheck
-          pnpm test
-          pnpm test:integration
-          pnpm python:lint
-          pnpm python:typecheck
-          pnpm python:test
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Lint web source
+        run: pnpm lint
+
+      - name: Build web applications
+        run: pnpm build
+
+      - name: Typecheck web source
+        run: pnpm typecheck
+
+      - name: Test packages
+        run: pnpm test
+
+      - name: Test platform contracts
+        run: pnpm test:integration
+
+      - name: Lint Python source
+        run: pnpm python:lint
+
+      - name: Typecheck Python source
+        run: pnpm python:typecheck
+
+      - name: Test Python source
+        run: pnpm python:test
 
       - name: Install browser
         run: pnpm --filter clinic-web exec playwright install --with-deps chromium
