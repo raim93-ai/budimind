@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   title: 'About Us | BudiMind Corporate',
   description:
     'BudiMind builds privacy-first workplace mental health platforms that help organisations measure, understand, and act on workforce wellbeing.',
-  alternates: { canonical: 'https://corporate.budimind.com/about' },
 };
 
 export default function AboutPage() {

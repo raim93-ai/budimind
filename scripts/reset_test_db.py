@@ -10,6 +10,13 @@ from urllib.parse import urlparse
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
+CORPORATE_LOCAL_URL = (
+    "postgresql+asyncpg://corporate_app:corporate_dev@localhost:5432/budimind_corporate"
+)
+CLINICAL_LOCAL_URL = (
+    "postgresql+asyncpg://clinical_app:clinical_dev@localhost:5433/budimind_clinical"
+)
+
 
 async def reset(url: str, service: str, database: str, user: str) -> None:
     parsed = urlparse(url)
@@ -48,13 +55,13 @@ async def reset(url: str, service: str, database: str, user: str) -> None:
 async def main() -> None:
     await asyncio.gather(
         reset(
-            os.environ["CORPORATE_DATABASE_URL"],
+            os.getenv("CORPORATE_DATABASE_URL", CORPORATE_LOCAL_URL),
             "corporate-db",
             "budimind_corporate",
             "corporate_app",
         ),
         reset(
-            os.environ["CLINICAL_DATABASE_URL"],
+            os.getenv("CLINICAL_DATABASE_URL", CLINICAL_LOCAL_URL),
             "clinical-db",
             "budimind_clinical",
             "clinical_app",

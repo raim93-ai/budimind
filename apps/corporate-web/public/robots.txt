@@ -1,4 +1,2 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://corporate.budimind.com/sitemap.xml
+Disallow: /

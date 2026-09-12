@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   title: 'How It Works | BudiMind Corporate',
   description:
     'Three steps from setup to meaningful intervention — deploy confidential campaigns, collect validated wellbeing signals, and review privacy-safe trends.',
-  alternates: { canonical: 'https://corporate.budimind.com/how-it-works' },
 };
 
 export default function HowItWorksPage() {

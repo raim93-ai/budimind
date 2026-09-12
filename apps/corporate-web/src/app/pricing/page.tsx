@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   title: 'Pricing | BudiMind Corporate',
   description:
     'Transparent pricing for confidential workforce wellbeing. Start with a free pilot, scale with growth.',
-  alternates: { canonical: 'https://corporate.budimind.com/pricing' },
 };
 
 const tiers = [

@@ -4,7 +4,6 @@ export const metadata: Metadata = {
   title: 'Blog | BudiMind Corporate',
   description:
     'Articles and insights on workplace mental health, employee wellbeing, and corporate psychology.',
-  alternates: { canonical: 'https://corporate.budimind.com/blog' },
 };
 
 export default function BlogPage() {

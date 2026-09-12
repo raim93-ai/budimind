@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   title: 'Solutions | BudiMind Corporate',
   description:
     'Tailored workforce wellbeing solutions for HR, management, and employee assistance programs. Evidence-based interventions for every team.',
-  alternates: { canonical: 'https://corporate.budimind.com/solutions' },
   openGraph: {
     title: 'Solutions | BudiMind Corporate',
     description:

@@ -4,7 +4,6 @@ export const metadata: Metadata = {
   title: 'Accessibility | BudiMind Corporate',
   description:
     'Accessibility statement for BudiMind Corporate - our commitment to digital accessibility.',
-  alternates: { canonical: 'https://corporate.budimind.com/accessibility' },
 };
 
 export default function AccessibilityPage() {

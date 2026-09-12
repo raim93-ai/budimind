@@ -30,9 +30,10 @@ vendor contract, or permission to process real-person data. G2 remains closed un
 - PostgreSQL is the system of record. Apply versioned migrations, foreign keys, constraints, UTC timestamps and RLS to
   every exposed table. Revoke default grants not required by `anon` or `authenticated`; a secret key is server-only and
   must never reach browser code because it bypasses RLS.
-- Deploy the two Next.js applications as separate Vercel projects with Functions pinned to Singapore (`sin1`). Keep
-  clinical and corporate environment variables and deployment access separate. CDN-hosted public assets contain only
-  reviewed public content.
+- Deploy the two Next.js applications and two FastAPI services as four Vercel projects with Functions pinned to
+  Singapore (`sin1`). Each web application proxies same-origin API paths to its matching service. Keep clinical and
+  corporate environment variables and deployment access separate. CDN-hosted public assets contain only reviewed public
+  content.
 - Use Supabase's transaction pooler for Vercel serverless database traffic and do not maintain per-instance SQLAlchemy
   pools. Require TLS for every hosted connection.
 - Singapore hosting is a cross-border transfer from Malaysia. Before any real-person data, execute the Supabase and

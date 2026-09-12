@@ -32,24 +32,12 @@ export const metadata: Metadata = {
     'workforce wellness',
   ],
   authors: [{ name: 'BudiMind' }],
-  openGraph: {
-    type: 'website',
-    locale: 'en-US',
-    url: 'https://corporate.budimind.com',
-    siteName: 'BudiMind Corporate',
-  },
-  twitter: {
-    card: 'summary_large_image',
-  },
-  alternates: {
-    canonical: 'https://corporate.budimind.com',
-  },
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
     googleBot: {
-      index: true,
-      follow: true,
+      index: false,
+      follow: false,
     },
   },
 };
@@ -103,49 +91,6 @@ const footerColumns = [
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        {/* Structured data for the corporate organization */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'BudiMind Corporate',
-              url: 'https://corporate.budimind.com',
-              logo: 'https://corporate.budimind.com/logo.png',
-              description:
-                'Confidential workforce assessments, privacy-released insights, and evidence-based interventions for organisational wellbeing.',
-              address: {
-                '@type': 'PostalAddress',
-                addressLocality: 'Kuala Lumpur',
-                addressCountry: 'MY',
-              },
-              contactPoint: [
-                {
-                  '@type': 'ContactPoint',
-                  telephone: '+60-11-1111-2222',
-                  email: 'hello@budimind.com',
-                  contactType: 'sales',
-                  areaServed: 'MY',
-                },
-                {
-                  '@type': 'ContactPoint',
-                  telephone: '+60-11-1111-2222',
-                  email: 'support@budimind.com',
-                  contactType: 'technical support',
-                  areaServed: 'MY',
-                },
-              ],
-              sameAs: [
-                'https://www.befrienders.org.my',
-                'https://www.moh.gov.my',
-                'https://www.apa.org',
-              ],
-            }),
-          }}
-        />
-      </head>
       <body className="flex flex-col min-h-screen">
         <a href="#main-content" className="skip-link">
           Skip to main content

@@ -1,82 +1,39 @@
 import type { Metadata } from 'next';
-import { Section, CrisisSupport, PsychologyResources } from '@budimind/ui';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | BudiMind Corporate',
-  description:
-    'Get in touch with BudiMind for sales, partnerships, or general enquiries. We are here to help.',
-  alternates: { canonical: 'https://corporate.budimind.com/contact' },
+  title: 'Contact',
+  description: 'BudiMind Corporate contact and pre-launch status.',
+  robots: { index: false, follow: false },
 };
 
 export default function ContactPage() {
   return (
-    <>
-      <Section
-        title="Contact Us"
-        subtitle="Have a question? Reach out and we'll get back to you within one business day."
-        center
-      >
-        <div className="max-w-2xl mx-auto">
-          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 text-left">
-            <div>
-              <h3 className="font-semibold text-primary mb-2">Sales</h3>
-              <p className="text-sm text-secondary mb-1">For demos and pricing:</p>
-              <p className="text-sm text-secondary">
-                <a href="mailto:sales@budimind.com" className="hover:underline">
-                  sales@budimind.com
-                </a>
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-primary mb-2">Support</h3>
-              <p className="text-sm text-secondary mb-1">For technical help:</p>
-              <p className="text-sm text-secondary">
-                <a href="mailto:support@budimind.com" className="hover:underline">
-                  support@budimind.com
-                </a>
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-primary mb-2">Press</h3>
-              <p className="text-sm text-secondary mb-1">Media enquiries:</p>
-              <p className="text-sm text-secondary">
-                <a href="mailto:press@budimind.com" className="hover:underline">
-                  press@budimind.com
-                </a>
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-primary mb-2">Address</h3>
-              <p className="text-sm text-secondary">
-                Level 3, Menara Multipurpose, No. 18, Jalan Sultan, 50000 Kuala Lumpur, Malaysia
-              </p>
-            </div>
-          </div>
-          <div className="mt-8 sm:mt-12 p-6 bg-gray-50 dark:bg-gray-900/40 rounded-xl border border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-secondary">
-              Prefer to schedule a conversation? Email us at{' '}
-              <a href="mailto:sales@budimind.com" className="text-primary hover:underline">
-                sales@budimind.com
-              </a>{' '}
-              and we will arrange a call at your convenience.
-            </p>
-          </div>
+    <section className="py-20 sm:py-28">
+      <div className="container max-w-3xl">
+        <p className="text-sm font-semibold tracking-wide text-teal-800">CONTACT · PRE-LAUNCH</p>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+          Contact details are being verified.
+        </h1>
+        <p className="mt-6 text-lg leading-8 text-slate-600">
+          BudiMind Corporate is not yet accepting programme registrations through this website. An
+          approved business address, email and response commitment will be published only after the
+          operating team confirms them.
+        </p>
+        <div className="mt-10 border-l-2 border-teal-700 bg-stone-50 p-6">
+          <h2 className="text-lg font-semibold text-slate-950">No sensitive information</h2>
+          <p className="mt-2 leading-7 text-slate-600">
+            Do not send employee names, assessment answers, health information or clinical details
+            through an unverified contact channel.
+          </p>
         </div>
-      </Section>
-
-      {/* Crisis support on contact page */}
-      <div className="container py-8">
-        <CrisisSupport />
+        <Link
+          className="mt-8 inline-block font-semibold text-teal-800 underline underline-offset-4"
+          href="/"
+        >
+          Return home
+        </Link>
       </div>
-
-      {/* Psychology resources */}
-      <div className="container pb-12">
-        <PsychologyResources
-          title="Mental Health Resources"
-          intro="For additional evidence-based information on mental health topics, we recommend the
-          following authoritative sources:"
-        />
-      </div>
-    </>
+    </section>
   );
 }

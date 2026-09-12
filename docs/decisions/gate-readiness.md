@@ -12,8 +12,8 @@ mandatory row has a named accountable human, a dated evidence link, and no block
 review and delegated unresolved product defaults. The review is recorded in
 `docs/evidence/multidisciplinary-requirements-review.md`.
 
-This permits Stages 1–3 with synthetic fixtures, deterministic fake identity and disabled external side effects. It does
-not permit real names/contact details, clinical or employee data, payments, public booking, external messaging,
+This permits Stages 1–10 with synthetic fixtures, deterministic fake identity and disabled external side effects. It
+does not permit real names/contact details, clinical or employee data, payments, public booking, external messaging,
 commercial launch or a compliance claim.
 
 ## Accountable roles

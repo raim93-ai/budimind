@@ -3,7 +3,6 @@ export const metadata: Metadata = {
   title: 'Careers | BudiMind Corporate',
   description:
     'Join our team and help shape the future of workplace mental health. View current openings and apply.',
-  alternates: { canonical: 'https://corporate.budimind.com/careers' },
 };
 
 export default function CareersPage() {

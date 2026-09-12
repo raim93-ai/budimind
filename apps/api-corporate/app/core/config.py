@@ -17,18 +17,11 @@ class Settings(BaseSettings):
     # CORS
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:3001"]
 
-    # Security
-    CORPORATE_SECRET_KEY: str = "dev-secret-key-change-in-production"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-
     @model_validator(mode="after")
     def reject_local_production_configuration(self) -> Self:
         if self.ENVIRONMENT == "production":
             if "localhost" in self.CORPORATE_DATABASE_URL:
                 raise ValueError("Production corporate database cannot use localhost")
-            if self.CORPORATE_SECRET_KEY.startswith("dev-"):
-                raise ValueError("Production corporate secret is not configured")
         return self
 
     model_config = SettingsConfigDict(

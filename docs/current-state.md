@@ -1,63 +1,38 @@
-# BudiMind Current-State Inventory
+# BudiMind Current State
 
-**Task:** S00-T01 Inventory and quarantine  
-**Observed:** 2026-09-10  
-**Source:** working tree inspection; no runtime behavior is inferred from filenames alone.
+Observed: 2026-09-12 — Branch: `codex/stage-03`
+Authoritative next task: S02-T01 in `LUNA_EXECUTION.md`
 
-## Repository state
+## Completed
 
-| Area                      | Observed state                                                           | Decision for Stage 00                                                |
-| ------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| Root Git repository       | No commits; all scaffold files are untracked                             | Keep current work intact; establish baseline only after owner review |
-| Nested context repository | Existing modified documents plus new planning documents                  | Preserve all changes; do not reset or merge automatically            |
-| `tmp/`                    | Ignored legacy GitHub review clone                                       | Keep quarantined and outside runtime imports                         |
-| `nul`                     | Untracked root artifact with unclear origin                              | Document; do not delete without explicit approval                    |
-| Context pack              | Product, architecture, stack, decisions, full-stack, and execution plans | Keep; execution plan v2.0 is authoritative for order                 |
+| Area                 | State                                                                                                    |
+| -------------------- | -------------------------------------------------------------------------------------------------------- |
+| Repository           | Root Git history established; work is pushed to `raim93-ai/budimind`                                     |
+| Toolchain            | Node 24, pnpm 10.15.1 metadata, Python 3.13, uv lock, ESLint, Prettier, Ruff, mypy and pytest            |
+| Local data boundary  | Two isolated PostgreSQL 15.8 containers and guarded migration/reset commands                             |
+| Hosted data boundary | Independent Supabase corporate/clinical migration roots with deny-by-default public grants               |
+| Deployment decision  | Four Vercel projects and two Singapore Supabase projects; cloud deployment runs after local coding       |
+| Requirements         | G0-S/G1-S approved for synthetic implementation through Stage 10                                         |
+| Web shells           | Corporate and clinic public shells plus loading, error, empty/pre-launch and not-found states            |
+| Test data            | Separate deterministic G2 corporate/clinical fixtures with external side effects disabled                |
+| Verification         | Unit, integration, production build and Playwright preview-smoke commands are executable                 |
+| CI                   | GitHub Actions definition pins the intended runtimes and runs database, source, build and browser checks |
 
-## Keep and use
+## Current implementation gap
 
-| Path                         | Why it is useful                                   | Constraints                                                           |
-| ---------------------------- | -------------------------------------------------- | --------------------------------------------------------------------- |
-| `apps/corporate-web`         | Corporate/Analysis Next.js application boundary    | Current pages are wireframes; rebuild against UI standard             |
-| `apps/clinic-web`            | Clinical/Public Next.js application boundary       | Current pages are wireframes; rebuild against UI standard             |
-| `apps/api-corporate`         | Corporate API namespace and health route skeleton  | No Python dependency manifest, models, migrations, or auth yet        |
-| `apps/api-clinical`          | Clinical API namespace and health route skeleton   | No Python dependency manifest, models, migrations, or auth yet        |
-| `apps/worker`                | Worker namespace/config/logging skeleton           | Needs plane-specific entry points, queues, retries, and tests         |
-| `packages/ui`                | Existing domain-neutral React primitives           | Audit accessibility and remove generic styling before reuse           |
-| `packages/contracts`         | Shared contract package placeholder                | Generate from separate API OpenAPI documents; no duplicate hand types |
-| `python/budimind_core`       | Intended shared audit/identity/error primitives    | Must not contain cross-plane repositories or data access              |
-| `python/corporate_domain`    | Intended corporate scoring/release domain          | Implement only approved instruments and policies                      |
-| `python/clinical_domain`     | Intended clinical booking/care domain              | Implement only approved clinical workflows                            |
-| `compose.yaml`               | Two isolated local PostgreSQL services             | Mirrors the two-project Supabase boundary for synthetic development   |
-| `infra/`                     | Empty Terraform module/environment layout          | Do not build cloud infrastructure before Stage 11                     |
-| `tests/`                     | Empty contract/security/performance/fixture layout | Add tests with the feature that needs them                            |
-| `psychology-clinic-context/` | Persistent product and engineering context         | Update only for approved decisions or plan evidence                   |
+The APIs remain health/root scaffolds. Domain schemas, identity sessions, policy enforcement, audit/outbox, practitioner
+directory, booking, clinical intake, corporate collection, privacy release and external adapters are not implemented.
+The exact task sequence and acceptance conditions are in `LUNA_EXECUTION.md`.
 
-## Rework before feature work
+## Preserved work
 
-| Finding                                                                                              | Evidence                                                        | Required owner/task                                                     |
-| ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Web apps and UI package use Next.js 14/React 18 ranges                                               | Both app manifests and `packages/ui/package.json`               | S00-T02: pin supported Next.js 16/React 19/Node 24                      |
-| Root package uses pnpm 9 and Node `>=20`                                                             | Root `package.json`                                             | S00-T02: pin pnpm 10 and Node 24 LTS                                    |
-| Web scripts use obsolete `next lint`                                                                 | Both app manifests                                              | S00-T02: replace with supported ESLint CLI                              |
-| Python dependencies are not declared or locked                                                       | No `pyproject.toml`/`uv.lock` in APIs, worker, or root          | S00-T02: create one locked Python workspace                             |
-| Root quality commands are declared but not all executable                                            | Root `package.json`; current install lacks a Prettier binary    | S00-T02/S00-T04: clean frozen install and make commands real            |
-| Current pages contain generic marketing gradients, repeated cards, and unsupported claims            | Current `src/app` pages/styles                                  | S02-T04 and feature stages: rebuild to calm clinical editorial standard |
-| No application migrations, auth, policy engine, or domain APIs                                       | App trees contain only health/root/config/session/logging stubs | S02 onward, after G0/G1 contracts                                       |
-| `compose.yaml` uses shared network, default database passwords, Redis, and broad LocalStack services | `compose.yaml`                                                  | S00-T03: minimize and isolate local dependencies; synthetic data only   |
-| Root README links to non-existent `docs/*.md` paths                                                  | Root `README.md`                                                | Corrected in planning task; keep links aligned as docs are created      |
+- `psychology-clinic-context` is a separate modified nested repository. Root documents override its old
+  Hostinger/MySQL/AWS platform wording; do not reset or push it to an unknown destination.
+- The ignored legacy clone remains quarantined under `tmp/` and is never imported into runtime code or fixtures.
+- The root `nul` artifact has unclear ownership and remains untouched.
 
-## Do not port
+## Non-negotiable release boundary
 
-- Legacy SQLite schema, sequential result identifiers, unauthenticated email/ID patient lookup, custom JWT fallback,
-  public result pages, employer clinical severity/risk metrics, company-assigned clinical assessments, and any real or
-  copied response data.
-- Any legacy UI claim of HIPAA/security certification, encryption, customer trust, or clinical outcome without current
-  jurisdiction-specific evidence and owner approval.
-
-## Quarantine rules
-
-1. The legacy clone remains under ignored `tmp/` and is never imported by a build, test, seed, or runtime path.
-2. Candidate wording, instruments, scoring, charts, and resources require an entry in the salvage register before use.
-3. Synthetic fixtures are authored in the target repository; do not copy legacy database rows or identifiers.
-4. Any removal of `nul`, old pages, or scaffold dependencies is a later task with an exact target and reversible change.
+Synthetic development may continue without further product decisions. Real identities, employee or clinical data,
+payments, external messages, public booking, production domains and commercial claims remain disabled until the inputs
+listed at the end of `LUNA_EXECUTION.md` and the G2 controls in `docs/decisions/gate-readiness.md` are satisfied.

@@ -18,6 +18,11 @@ describe('platform deployment contract', () => {
     expect(env).not.toContain('NEXT_PUBLIC_CORPORATE_SUPABASE_SECRET_KEY');
     expect(env).not.toContain('NEXT_PUBLIC_CLINICAL_SUPABASE_SECRET_KEY');
 
+    for (const app of ['corporate-web', 'clinic-web', 'api-corporate', 'api-clinical']) {
+      const vercel = readFileSync(resolve(root, 'apps', app, 'vercel.json'), 'utf8');
+      expect(vercel).toContain('"sin1"');
+    }
+
     for (const plane of ['corporate', 'clinical']) {
       const migration = readFileSync(
         resolve(root, 'supabase', plane, 'migrations', '202609120001_baseline.sql'),

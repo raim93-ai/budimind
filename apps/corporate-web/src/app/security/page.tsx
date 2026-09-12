@@ -4,7 +4,6 @@ import { Section, EvidenceDisclaimer, PsychologyResources } from '@budimind/ui';
 export const metadata: Metadata = {
   title: 'Security & Compliance | BudiMind Corporate',
   description: 'Security and compliance features for the BudiMind corporate wellbeing platform.',
-  alternates: { canonical: 'https://corporate.budimind.com/security' },
 };
 
 export default function SecurityPage() {

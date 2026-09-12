@@ -1,7 +1,7 @@
 # BudiMind Permission Contract
 
-Status: BASELINE DEFINED — named G1 approval required Rule: deny by default; API policies, database queries, and tests
-must enforce this matrix.
+Status: APPROVED FOR SYNTHETIC IMPLEMENTATION UNDER G1-S Rule: deny by default; API policies, database queries, and
+tests must enforce this matrix.
 
 | Role                   | Plane              | Allowed scope                                                                              | Explicitly denied                                                                                             |
 | ---------------------- | ------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |

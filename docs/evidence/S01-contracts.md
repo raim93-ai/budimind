@@ -19,7 +19,7 @@ vendor, retention and security defaults. The supplied presale deck is treated as
 
 ## Gate disposition
 
-- **G0-S and G1-S passed:** the multidisciplinary internal review found no requirements defect blocking Stages 1–3 with
+- **G0-S and G1-S passed:** the multidisciplinary internal review found no requirements defect blocking Stages 1–10 with
   synthetic fixtures and external side effects disabled.
 - **G2 remains closed:** named legal/privacy, clinical, security and I/O psychology owners, instrument/vendor evidence,
   production accounts and independent assurance are still required before real-person data or commercial operation.
@@ -39,4 +39,4 @@ vendor, retention and security defaults. The supplied presale deck is treated as
   engineering smoke review, not the required independent accessibility or human design approval.
 - No secrets, real data, or unsupported production/compliance claims were added.
 
-Next action: obtain G0 decisions and a reachable Docker daemon, then complete S00-T03/S00-T04 before closing Stage 01.
+Next action: S02-T01 database and migration foundation under the synthetic implementation gate.

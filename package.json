@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "install:all": "pnpm install --frozen-lockfile",
-    "format:check": "prettier --check README.md AGENTS.md package.json pnpm-workspace.yaml tsconfig.json eslint.config.mjs .prettierrc compose.yaml \"apps/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"packages/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"docs/**/*.md\" \"psychology-clinic-context/**/*.{md,json}\"",
-    "format": "prettier --write README.md AGENTS.md package.json pnpm-workspace.yaml tsconfig.json eslint.config.mjs .prettierrc compose.yaml \"apps/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"packages/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"docs/**/*.md\" \"psychology-clinic-context/**/*.{md,json}\"",
+    "format:check": "prettier --check README.md AGENTS.md LUNA_EXECUTION.md package.json pnpm-workspace.yaml tsconfig.json eslint.config.mjs .prettierrc compose.yaml \".github/**/*.{yml,yaml}\" \"apps/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"packages/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"docs/**/*.md\" \"psychology-clinic-context/**/*.{md,json}\"",
+    "format": "prettier --write README.md AGENTS.md LUNA_EXECUTION.md package.json pnpm-workspace.yaml tsconfig.json eslint.config.mjs .prettierrc compose.yaml \".github/**/*.{yml,yaml}\" \"apps/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"packages/**/*.{ts,tsx,js,json,md,yml,yaml}\" \"docs/**/*.md\" \"psychology-clinic-context/**/*.{md,json}\"",
     "lint": "eslint \"**/*.{ts,tsx}\" --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --dir packages",

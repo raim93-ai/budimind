@@ -12,6 +12,12 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
 MIGRATION = "0001_baseline"
+CORPORATE_LOCAL_URL = (
+    "postgresql+asyncpg://corporate_app:corporate_dev@localhost:5432/budimind_corporate"
+)
+CLINICAL_LOCAL_URL = (
+    "postgresql+asyncpg://clinical_app:clinical_dev@localhost:5433/budimind_clinical"
+)
 SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS _schema_migrations (
     version VARCHAR(64) PRIMARY KEY,
@@ -72,13 +78,13 @@ async def migrate(url: str, service: str, database: str, user: str) -> None:
 async def main() -> None:
     await asyncio.gather(
         migrate(
-            os.environ["CORPORATE_DATABASE_URL"],
+            os.getenv("CORPORATE_DATABASE_URL", CORPORATE_LOCAL_URL),
             "corporate-db",
             "budimind_corporate",
             "corporate_app",
         ),
         migrate(
-            os.environ["CLINICAL_DATABASE_URL"],
+            os.getenv("CLINICAL_DATABASE_URL", CLINICAL_LOCAL_URL),
             "clinical-db",
             "budimind_clinical",
             "clinical_app",

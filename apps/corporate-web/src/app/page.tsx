@@ -14,7 +14,6 @@ export const metadata: Metadata = {
   title: 'Corporate Workforce Assessment & Analytics | BudiMind',
   description:
     'Confidential assessments, privacy-released insights, and evidence-based interventions for organisational wellbeing.',
-  alternates: { canonical: 'https://corporate.budimind.com/' },
   openGraph: {
     title: 'Corporate Workforce Assessment & Analytics | BudiMind',
     description:

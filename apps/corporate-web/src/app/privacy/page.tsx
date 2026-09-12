@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   title: 'Privacy | BudiMind Corporate',
   description:
     'Privacy policy for BudiMind Corporate - how we handle your organisation and employee data.',
-  alternates: { canonical: 'https://corporate.budimind.com/privacy' },
 };
 
 export default function PrivacyPage() {

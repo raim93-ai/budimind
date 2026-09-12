@@ -1,6 +1,6 @@
 # Stage 01 Threat and Abuse Model
 
-Status: BASELINE DEFINED — G1 security/privacy/clinical review required
+Status: APPROVED FOR SYNTHETIC IMPLEMENTATION UNDER G1-S — independent review required before G2
 
 | Flow                       | Primary abuse                                                  | Required mitigation/test                                                                              |
 | -------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |

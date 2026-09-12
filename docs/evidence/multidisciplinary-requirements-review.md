@@ -52,8 +52,8 @@ launch commercially. Those actions remain subject to G2 and named accountable hu
 
 ## Residual findings
 
-There is no blocking requirements defect for Stages 1–3 using synthetic data. The remaining findings are operational and
-release conditions: named accountable owners, professional credentials, instrument permission, executed vendor
+There is no blocking requirements defect for Stages 1–10 using synthetic data. The remaining findings are operational
+and release conditions: named accountable owners, professional credentials, instrument permission, executed vendor
 agreements, production accounts, independent assurance and recovery evidence.
 
 ## Sources checked

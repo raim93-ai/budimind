@@ -4,12 +4,12 @@ Status: ACTIVE — supersedes Hostinger/MySQL/AWS deployment wording Decision da
 
 ## Non-negotiable platform shape
 
-| Plane              | Vercel project           | Supabase project     | Public browser key             | Server secret         |
-| ------------------ | ------------------------ | -------------------- | ------------------------------ | --------------------- |
-| Corporate/Analysis | `budimind-corporate-web` | `budimind-corporate` | Corporate publishable key only | Corporate secret only |
-| Clinical/Public    | `budimind-clinic-web`    | `budimind-clinical`  | Clinical publishable key only  | Clinical secret only  |
+| Plane              | Vercel projects                                    | Supabase project     | Public browser key             | Server secret         |
+| ------------------ | -------------------------------------------------- | -------------------- | ------------------------------ | --------------------- |
+| Corporate/Analysis | `budimind-corporate-web`, `budimind-corporate-api` | `budimind-corporate` | Corporate publishable key only | Corporate secret only |
+| Clinical/Public    | `budimind-clinic-web`, `budimind-clinical-api`     | `budimind-clinical`  | Clinical publishable key only  | Clinical secret only  |
 
-Both Supabase projects use the specific Singapore region. Both Vercel projects pin Functions to `sin1`. Never copy a
+Both Supabase projects use the specific Singapore region. All four Vercel projects pin Functions to `sin1`. Never copy a
 key, database URL, Auth user, Storage bucket, migration, webhook secret or backup between planes. No cross-project SQL,
 foreign data wrapper, shared service account or unrestricted analytics sink is permitted.
 
@@ -58,12 +58,12 @@ Exit: two synthetic-only projects, migrations reproducible, RLS/grant denial tes
 
 ### P2 — Vercel preview projects
 
-1. Import the GitHub repository into two Vercel projects. Set Root Directory to `apps/corporate-web` and
-   `apps/clinic-web` respectively. Do not combine the deployments.
+1. Import the GitHub repository into four Vercel projects. Set Root Directory to `apps/corporate-web`,
+   `apps/api-corporate`, `apps/clinic-web` and `apps/api-clinical` respectively. Do not combine the data planes.
 2. Use Node 24 and the repository-pinned pnpm version. Keep Framework Preset `Next.js`; do not override build output.
 3. Confirm each checked-in `vercel.json` pins server functions to `sin1`.
-4. Add only that plane's Supabase URL and publishable key to Preview. Add a secret key only when a reviewed server route
-   genuinely requires it. Never expose database URLs or secrets to `NEXT_PUBLIC_*`.
+4. Add only that plane's Supabase URL and publishable key to its web Preview. Add database/secret variables only to its
+   API Preview. Never expose database URLs or secrets to `NEXT_PUBLIC_*`.
 5. Keep generated preview URLs access-controlled where the plan permits. Use synthetic fixtures and Supabase test-mode
    email only. Do not attach the production domain yet.
 6. Verify headers, robots/noindex, 390/768/1440 layouts, keyboard navigation, 200% zoom, error/empty/loading states and

@@ -4,7 +4,6 @@ import { EvidenceDisclaimer } from '@budimind/ui';
 export const metadata: Metadata = {
   title: 'Terms of Service | BudiMind Corporate',
   description: 'Terms of service for using the BudiMind Corporate platform and services.',
-  alternates: { canonical: 'https://corporate.budimind.com/terms' },
 };
 
 export default function TermsPage() {

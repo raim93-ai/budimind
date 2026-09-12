@@ -1,6 +1,6 @@
 # BudiMind Data Classification and Flow Contract
 
-Status: BASELINE DEFINED — named G1 approval required Principle: collect the minimum data needed for an approved
+Status: APPROVED FOR SYNTHETIC IMPLEMENTATION UNDER G1-S Principle: collect the minimum data needed for an approved
 purpose; keep the corporate and clinical planes physically separate.
 
 | Class                  | Examples                                                                                  | Permitted location                                        | Handling baseline                                                                     |

@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   title: 'Features & Solutions | BudiMind Corporate',
   description:
     'Confidential workforce assessments, privacy-released insights, and evidence-based interventions — built for HR, compliance, and wellbeing teams.',
-  alternates: { canonical: 'https://corporate.budimind.com/features' },
 };
 
 const productFeatures = [
