@@ -37,6 +37,9 @@ lerna-debug.log*
 
 # Testing
 coverage/
+.playwright/
+test-results/
+**/test-results/
 .nyc_output/
 *.lcov
 

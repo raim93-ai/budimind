@@ -8,3 +8,6 @@ tmp/
 .venv/
 psychology-clinic-context/.git/
 **/next-env.d.ts
+**/AGENTS.md
+**/CLAUDE.md
+**/test-results/**
