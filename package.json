@@ -18,7 +18,7 @@
     "python:sync": "uv sync --all-packages --locked",
     "python:lint": "uv run ruff check .",
     "python:typecheck": "uv run mypy apps/api-corporate/app && uv run mypy apps/api-clinical/app && uv run mypy apps/worker/worker",
-    "python:test": "uv run pytest",
+    "python:test": "uv run python scripts/run_python_tests.py",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "db:migrate": "uv run python scripts/migrate.py",
     "db:reset:test": "uv run python scripts/reset_test_db.py"

@@ -35,7 +35,13 @@ describe('platform deployment contract', () => {
         resolve(root, 'supabase', plane, 'migrations', '202609120002_trusted_platform.sql'),
         'utf8'
       );
-      for (const table of ['app_actor', 'server_session', 'idempotency_key', 'audit_event', 'outbox_job']) {
+      for (const table of [
+        'app_actor',
+        'server_session',
+        'idempotency_key',
+        'audit_event',
+        'outbox_job',
+      ]) {
         expect(trusted).toContain(`private.${table}`);
       }
       expect(trusted).toContain('append-only');

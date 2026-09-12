@@ -35,6 +35,7 @@ select = ["E", "F", "I", "B", "UP"]
 [tool.pytest.ini_options]
 testpaths = ["tests", "apps", "python"]
 asyncio_mode = "auto"
+pythonpath = ["."]
 
 [tool.mypy]
 python_version = "3.13"

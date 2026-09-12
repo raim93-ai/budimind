@@ -1,0 +1,41 @@
+"""Shared identity and opaque server-session primitives for both data planes."""
+
+from .session import (
+    CSRF_COOKIE_NAME,
+    SESSION_COOKIE_NAME,
+    ActorContext,
+    AuthIdentity,
+    DeterministicFakeIdentityAdapter,
+    IdentityProviderUnavailable,
+    InvalidIdentity,
+    SessionContext,
+    SupabaseIdentityAdapter,
+    build_identity_adapter,
+    csrf_matches,
+    issue_session,
+    lookup_actor_for_identity,
+    lookup_session,
+    revoke_session,
+    rotate_session,
+    token_hash,
+)
+
+__all__ = [
+    "CSRF_COOKIE_NAME",
+    "SESSION_COOKIE_NAME",
+    "ActorContext",
+    "AuthIdentity",
+    "DeterministicFakeIdentityAdapter",
+    "IdentityProviderUnavailable",
+    "InvalidIdentity",
+    "SessionContext",
+    "SupabaseIdentityAdapter",
+    "build_identity_adapter",
+    "csrf_matches",
+    "issue_session",
+    "lookup_actor_for_identity",
+    "lookup_session",
+    "revoke_session",
+    "rotate_session",
+    "token_hash",
+]

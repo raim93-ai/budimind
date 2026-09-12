@@ -16,22 +16,34 @@ class Settings(BaseSettings):
     CLINICAL_SUPABASE_URL: str = ""
     CLINICAL_SUPABASE_PUBLISHABLE_KEY: str = ""
     CLINICAL_SUPABASE_SECRET_KEY: str = ""
+    AUTH_PROVIDER: str = "fake"
+    AUTH_SESSION_TTL_SECONDS: int = 1800
+    AUTH_COOKIE_SECURE: bool = True
 
     # CORS
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:3001"]
 
     @model_validator(mode="after")
     def reject_local_production_configuration(self) -> Self:
+        if self.AUTH_PROVIDER not in {"supabase", "fake"}:
+            raise ValueError("AUTH_PROVIDER must be supabase or fake")
+        if not 60 <= self.AUTH_SESSION_TTL_SECONDS <= 86_400:
+            raise ValueError("AUTH_SESSION_TTL_SECONDS must be between 60 and 86400")
+        if self.ENVIRONMENT == "production" and self.AUTH_PROVIDER == "fake":
+            raise ValueError("Deterministic fake identity cannot be enabled in production")
+        if self.ENVIRONMENT == "production" and not self.AUTH_COOKIE_SECURE:
+            raise ValueError("Production auth cookies must use Secure")
         if self.ENVIRONMENT == "production":
             if any(host in self.CLINICAL_DATABASE_URL for host in ("localhost", "127.0.0.1")):
                 raise ValueError("Production clinical database cannot use localhost")
             if not self.CLINICAL_DATABASE_URL.startswith("postgresql+asyncpg://"):
                 raise ValueError("Production clinical database must use async PostgreSQL")
-            if not self.CLINICAL_SUPABASE_URL.startswith("https://"):
+            if self.AUTH_PROVIDER == "supabase" and not self.CLINICAL_SUPABASE_URL.startswith(
+                "https://"
+            ):
                 raise ValueError("Production Supabase URL must use HTTPS")
-            if (
-                not self.CLINICAL_SUPABASE_PUBLISHABLE_KEY
-                or not self.CLINICAL_SUPABASE_SECRET_KEY
+            if self.AUTH_PROVIDER == "supabase" and (
+                not self.CLINICAL_SUPABASE_PUBLISHABLE_KEY or not self.CLINICAL_SUPABASE_SECRET_KEY
             ):
                 raise ValueError("Production Supabase keys must be configured as server secrets")
             if any(origin.startswith("http://localhost") for origin in self.CORS_ORIGINS):
