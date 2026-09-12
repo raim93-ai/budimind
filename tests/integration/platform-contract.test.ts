@@ -17,5 +17,14 @@ describe('platform deployment contract', () => {
     expect(env).toContain('NEXT_PUBLIC_CLINICAL_SUPABASE_PUBLISHABLE_KEY=');
     expect(env).not.toContain('NEXT_PUBLIC_CORPORATE_SUPABASE_SECRET_KEY');
     expect(env).not.toContain('NEXT_PUBLIC_CLINICAL_SUPABASE_SECRET_KEY');
+
+    for (const plane of ['corporate', 'clinical']) {
+      const migration = readFileSync(
+        resolve(root, 'supabase', plane, 'migrations', '202609120001_baseline.sql'),
+        'utf8'
+      );
+      expect(migration).toContain('revoke all on schema public from anon, authenticated');
+      expect(migration).not.toContain('service_role');
+    }
   });
 });
