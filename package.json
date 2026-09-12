@@ -9,7 +9,7 @@
     "lint": "eslint \"**/*.{ts,tsx}\" --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --dir packages",
-    "test:e2e": "playwright test",
+    "test:e2e": "pnpm run build:web && pnpm --filter clinic-web test:e2e && pnpm --filter corporate-web test:e2e",
     "build:web": "pnpm --filter corporate-web build && pnpm --filter clinic-web build",
     "build:packages": "pnpm --filter ui build && pnpm --filter contracts build",
     "build": "pnpm run build:web && pnpm run build:packages",
