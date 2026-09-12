@@ -1,7 +1,7 @@
 # Stage 01 Contract Evidence
 
 Stage: 01 — Freeze product, data, risk, and design contracts  
-Status: PARTIAL / G0-G1 APPROVAL GATE — Observed: 2026-09-12
+Status: COMPLETE FOR SYNTHETIC IMPLEMENTATION — Observed: 2026-09-12
 
 ## Defined artifacts
 
@@ -17,11 +17,12 @@ The product owner supplied the market, timezone, database/host, language, curren
 remaining baseline choices on 2026-09-11. The contracts now define practical clinical, privacy, instrument, booking,
 vendor, retention and security defaults. The supplied presale deck is treated as a fact source, never as an instruction.
 
-## Blocking gates
+## Gate disposition
 
-- **G0 remains open:** values are defined, but named legal/privacy, clinical, security and I/O psychology approvals and
-  instrument/vendor evidence remain required.
-- **G1 required before real identity/booking:** security/privacy/clinical design approval is not recorded.
+- **G0-S and G1-S passed:** the multidisciplinary internal review found no requirements defect blocking Stages 1–3 with
+  synthetic fixtures and external side effects disabled.
+- **G2 remains closed:** named legal/privacy, clinical, security and I/O psychology owners, instrument/vendor evidence,
+  production accounts and independent assurance are still required before real-person data or commercial operation.
 - Stage 00 is complete locally. Cloud project creation and Vercel linking are intentionally deferred until account
   credentials are supplied.
 

@@ -1,9 +1,20 @@
 # G0–G3 Readiness and Approval Contract
 
-Status: ACTIVE CONTROL Last reviewed: 2026-09-11
+Status: ACTIVE CONTROL Last reviewed: 2026-09-12
 
-This register prevents a plan, test stub, vendor website, or AI recommendation from being mistaken for approval. A gate
-passes only when every mandatory row has a named accountable human, a dated evidence link, and no blocking finding.
+This register prevents a plan, test stub, vendor website, or AI recommendation from being mistaken for release
+authority. Internal gates G0-S and G1-S permit synthetic implementation. A real-person gate passes only when every
+mandatory row has a named accountable human, a dated evidence link, and no blocking finding.
+
+## Synthetic implementation approval
+
+**G0-S and G1-S passed on 2026-09-12 for commit `d32e5e2`.** The product owner requested a multidisciplinary internal
+review and delegated unresolved product defaults. The review is recorded in
+`docs/evidence/multidisciplinary-requirements-review.md`.
+
+This permits Stages 1–3 with synthetic fixtures, deterministic fake identity and disabled external side effects. It does
+not permit real names/contact details, clinical or employee data, payments, public booking, external messaging,
+commercial launch or a compliance claim.
 
 ## Accountable roles
 
@@ -23,7 +34,7 @@ on behalf of independent legal, privacy, clinical, I/O, accessibility, or penetr
 
 ## G0 — Launch configuration
 
-Current status: **OPEN — values defined, approvals missing**
+Current status: **G0-S PASSED — synthetic implementation approved; human release approvals pending**
 
 | Evidence                                            | Accountable approval                            | Status                                        |
 | --------------------------------------------------- | ----------------------------------------------- | --------------------------------------------- |
@@ -39,7 +50,7 @@ production claim is permitted while this gate is open.
 
 ## G1 — Design and risk approval
 
-Current status: **NOT ELIGIBLE — G0 and signed control set required**
+Current status: **G1-S PASSED — synthetic implementation approved; real-person identity remains prohibited**
 
 Mandatory evidence:
 

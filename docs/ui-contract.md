@@ -1,6 +1,6 @@
 # UI Contract
 
-Status: BASELINE DEFINED — product/design/accessibility review required
+Status: APPROVED BASELINE FOR SYNTHETIC IMPLEMENTATION — independent accessibility review required before G2
 
 The product uses a calm clinical editorial direction: warm neutral surfaces, near-black text, one restrained teal/blue
 action colour, semantic status colours, self-hosted type, 4/8 spacing, 8–12 px radii, borders and whitespace before

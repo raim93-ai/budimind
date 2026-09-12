@@ -1,11 +1,12 @@
 # Launch Configuration — G0 Decision Record
 
-Status: BASELINE DEFINED — named legal, privacy, clinical, security, and I/O psychology approval pending Decision
-authority: Product-owner instruction dated 2026-09-11 and the supplied BudiMind presale deck Last reviewed: 2026-09-11
+Status: INTERNALLY APPROVED FOR SYNTHETIC IMPLEMENTATION (G0-S/G1-S) Decision authority: Product-owner instruction dated
+2026-09-11, multidisciplinary internal review dated 2026-09-12 and the supplied BudiMind presale deck Last reviewed:
+2026-09-12
 
-This is the implementation baseline for synthetic-data work. It is not legal advice, a regulatory approval, a vendor
-contract, or permission to process real-person data. Gate G0 closes only when the accountable human reviewers named in
-`gate-readiness.md` sign this exact revision.
+This is the approved implementation baseline for synthetic-data work. It is not legal advice, a regulatory approval, a
+vendor contract, or permission to process real-person data. G2 remains closed until accountable human reviewers named in
+`gate-readiness.md` sign the release candidate and all production conditions are evidenced.
 
 ## 1. Operator, jurisdiction, locale, and domain
 
@@ -228,12 +229,11 @@ vendor register before G2.
   backup restore, incident exercise, and independent penetration/privacy review before G2.
 - No product copy may claim HIPAA, PDPA, clinical, security, or accessibility compliance merely from this baseline.
 
-## 9. G0 closure record
+## 9. Gate record
 
-The product values are defined. G0 remains open until named people holding Product, Legal/Privacy, Clinical Governance,
-Security/Engineering, and I/O Psychology accountability approve the same commit and record dated evidence. The product
-owner's 2026-09-11 instruction authorises this baseline for synthetic implementation; it does not substitute for those
-professional approvals.
+G0-S and G1-S are approved for synthetic implementation by the product-owner instruction and the internal review dated
+2026-09-12. Named Product, Legal/Privacy, Clinical Governance, Security/Engineering and I/O Psychology approval remains
+mandatory at G2 before real-person processing or commercial operation.
 
 ## 10. Primary references reviewed
 

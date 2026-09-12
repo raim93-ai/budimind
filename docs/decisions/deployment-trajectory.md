@@ -81,7 +81,8 @@ Exit: both preview builds pass independently and cannot access the other plane.
 4. Add bilingual privacy, consent and crisis content where comprehension is safety-critical.
 5. Complete threat-model denial tests and a cross-plane secret/configuration test.
 
-Exit: Stage 2 evidence is complete and G1 has named human approval. Synthetic data remains mandatory until G2.
+Exit: Stage 2 synthetic evidence is complete under G1-S. Synthetic data remains mandatory until G2 has named human
+approval.
 
 ### P4 — Stage 3 verified directory
 
