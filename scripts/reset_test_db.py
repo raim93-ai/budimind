@@ -1,4 +1,4 @@
-"""Reset only the baseline migration marker in explicitly configured dev databases."""
+"""Reset the private schema in explicitly configured local dev databases."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ async def reset(url: str, service: str, database: str, user: str) -> None:
     engine = create_async_engine(url, pool_pre_ping=True)
     try:
         async with engine.begin() as connection:
-            await connection.execute(text("DROP TABLE IF EXISTS _schema_migrations"))
+            await connection.execute(text("DROP SCHEMA IF EXISTS private CASCADE"))
     except Exception:
         subprocess.run(
             [
@@ -42,7 +42,7 @@ async def reset(url: str, service: str, database: str, user: str) -> None:
                 "-v",
                 "ON_ERROR_STOP=1",
                 "-c",
-                "DROP TABLE IF EXISTS _schema_migrations;",
+                "DROP SCHEMA IF EXISTS private CASCADE;",
             ],
             check=True,
             capture_output=True,

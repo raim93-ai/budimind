@@ -1,7 +1,7 @@
 # Luna Execution Handoff
 
 - Status: READY FOR SYNTHETIC IMPLEMENTATION
-- Current task: S02-T01
+- Current task: S02-T02
 - Deployment rule: finish and verify all local coding through Stage 10 before creating cloud deployments.
 
 ## Read order
@@ -64,7 +64,7 @@ claims. A completed UI route includes loading, empty, error, unauthorized and na
 
 ## Remaining coding queue
 
-### S02-T01 — database foundation
+### S02-T01 — database foundation (complete; see `docs/evidence/S02-T01.md`)
 
 Implement independent corporate and clinical migrations. Each plane needs UUID/UTC conventions, actor projection, opaque
 server-session records, idempotency keys, append-only audit events and outbox jobs. Add only the domain tables needed by

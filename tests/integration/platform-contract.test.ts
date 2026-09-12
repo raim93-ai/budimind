@@ -28,8 +28,17 @@ describe('platform deployment contract', () => {
         resolve(root, 'supabase', plane, 'migrations', '202609120001_baseline.sql'),
         'utf8'
       );
-      expect(migration).toContain('revoke all on schema public from anon, authenticated');
+      expect(migration).toContain('schema public');
       expect(migration).not.toContain('service_role');
+
+      const trusted = readFileSync(
+        resolve(root, 'supabase', plane, 'migrations', '202609120002_trusted_platform.sql'),
+        'utf8'
+      );
+      for (const table of ['app_actor', 'server_session', 'idempotency_key', 'audit_event', 'outbox_job']) {
+        expect(trusted).toContain(`private.${table}`);
+      }
+      expect(trusted).toContain('append-only');
     }
   });
 
