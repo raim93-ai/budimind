@@ -20,11 +20,11 @@ Before changing application, infrastructure, schema, or deployment code:
 
 1. Read this file completely.
 2. Read `LUNA_EXECUTION.md` completely.
-3. Read `psychology-clinic-context/SESSION_CONTEXT.md`.
-4. Read only the current stage section in `psychology-clinic-context/AI_DEPLOYMENT_EXECUTION_PLAN.md`.
-5. Locate the earliest incomplete task in the active stage. Work on that task only.
-6. Read every file listed for that task in `LUNA_EXECUTION.md` and the plan's task file-routing table.
-7. Inspect `git status --short` and preserve unrelated or pre-existing work.
+3. If the context submodule is initialized, read `psychology-clinic-context/SESSION_CONTEXT.md` and only the current
+   stage section in `psychology-clinic-context/AI_DEPLOYMENT_EXECUTION_PLAN.md`.
+4. Locate the earliest incomplete task in the active stage. Work on that task only.
+5. Read every file listed for that task in `LUNA_EXECUTION.md` and, when available, the plan's task file-routing table.
+6. Inspect `git status --short` and preserve unrelated or pre-existing work.
 
 If the user explicitly names a later task, execute that task only after confirming its prerequisites are complete.
 

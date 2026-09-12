@@ -11,10 +11,12 @@
 3. `docs/decisions/launch-configuration.md`
 4. `docs/permissions-matrix.md`
 5. `docs/data-classification.md`
-6. The current stage section in `psychology-clinic-context/AI_DEPLOYMENT_EXECUTION_PLAN.md`
+6. If the submodule is initialized, the current stage section in
+   `psychology-clinic-context/AI_DEPLOYMENT_EXECUTION_PLAN.md`
 
-Do not treat old MySQL, Hostinger or AWS wording in the nested context repository as current. PostgreSQL, Supabase and
-Vercel decisions in the root documents always win.
+This file is sufficient to start work when the optional context submodule is not initialized. Do not treat old MySQL,
+Hostinger or AWS wording in that repository as current. PostgreSQL, Supabase and Vercel decisions in the root documents
+always win.
 
 ## Fixed architecture
 
