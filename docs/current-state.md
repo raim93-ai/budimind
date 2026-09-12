@@ -1,7 +1,8 @@
 # BudiMind Current State
 
-Observed: 2026-09-12 — Branch: `codex/stage-03`
-Authoritative next task: S02-T01 in `LUNA_EXECUTION.md`
+- Observed: 2026-09-12
+- Branch: `codex/stage-03`
+- Authoritative next task: S02-T01 in `LUNA_EXECUTION.md`
 
 ## Completed
 

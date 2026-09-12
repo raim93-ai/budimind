@@ -1,7 +1,8 @@
 # Luna Execution Handoff
 
-Status: READY FOR SYNTHETIC IMPLEMENTATION — Current task: S02-T01
-Deployment rule: finish and verify all local coding through Stage 10 before creating cloud deployments.
+- Status: READY FOR SYNTHETIC IMPLEMENTATION
+- Current task: S02-T01
+- Deployment rule: finish and verify all local coding through Stage 10 before creating cloud deployments.
 
 ## Read order
 
@@ -68,8 +69,8 @@ server-session records, idempotency keys, append-only audit events and outbox jo
 the next vertical slice. Keep application tables in a non-public schema; expose reviewed public projections only. Test
 clean migration, uniqueness, rollback-on-error and cross-plane credential failure.
 
-Read: `supabase/README.md`, both baseline migrations, both API database sessions, `fixtures/g2/*.json`.
-Exit: `pnpm db:reset:test && pnpm db:migrate && pnpm test:integration` pass twice from a clean database.
+- Read: `supabase/README.md`, both baseline migrations, both API database sessions, `fixtures/g2/*.json`.
+- Exit: `pnpm db:reset:test && pnpm db:migrate && pnpm test:integration` pass twice from a clean database.
 
 ### S02-T02 — synthetic identity and sessions
 
