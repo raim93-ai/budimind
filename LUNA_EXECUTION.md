@@ -1,7 +1,7 @@
 # Luna Execution Handoff
 
 - Status: READY FOR SYNTHETIC IMPLEMENTATION
-- Current task: S03-T01
+- Current task: S03-T02
 - Deployment rule: finish and verify all local coding through Stage 10 before creating cloud deployments.
 
 ## Read order
@@ -105,6 +105,8 @@ unpublished. Only clinical operations can record review; publication requires cu
 indemnity plus two synthetic approvals. Expiry/suspension must unpublish atomically. Public API uses opaque slugs,
 allow-listed filters, bounded pagination and public fields only. Replace the directory empty state only in test/dev;
 production remains empty until real credentials pass G2.
+
+S03-T01 is complete; see `docs/evidence/S03-T01.md`. The next permitted task is S03-T02 (public directory API and UI).
 
 Exit: publication lifecycle, leakage, enumeration, cache and accessible UI tests pass.
 

@@ -22,6 +22,14 @@ def test_policy_allows_matching_scope() -> None:
     )
 
 
+def test_clinical_operations_can_manage_directory() -> None:
+    authorize(
+        context(role="clinical_operations", plane="clinical"),
+        plane="clinical",
+        roles=frozenset({"clinic_admin", "clinical_operations"}),
+    )
+
+
 @pytest.mark.parametrize(
     "changes, kwargs",
     [
