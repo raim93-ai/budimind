@@ -1,7 +1,7 @@
 # Luna Execution Handoff
 
 - Status: READY FOR SYNTHETIC IMPLEMENTATION
-- Current task: S02-T03
+- Current task: S02-T04
 - Deployment rule: finish and verify all local coding through Stage 10 before creating cloud deployments.
 
 ## Read order
@@ -83,7 +83,7 @@ state-changing browser requests. Do not implement passwords or JWT issuance.
 
 Exit: verified-email, logout, rotation, expiry, CSRF failure, wrong-plane and production-fake rejection tests pass.
 
-### S02-T03 — policy and audit
+### S02-T03 — policy and audit (complete; see `docs/evidence/S02-T03.md`)
 
 Turn `docs/permissions-matrix.md` into explicit action checks. Every protected query requires plane, role, tenant when
 applicable, purpose and relationship. Emit payload-minimised append-only audit records with correlation IDs. Generic

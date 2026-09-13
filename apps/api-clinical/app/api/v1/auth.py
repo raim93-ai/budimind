@@ -15,9 +15,11 @@ from python.budimind_auth import (
     AuthIdentity,
     IdentityProviderUnavailable,
     InvalidIdentity,
+    PolicyContext,
     SessionContext,
     build_identity_adapter,
     csrf_matches,
+    emit_audit,
     issue_session,
     lookup_actor_for_identity,
     lookup_session,
@@ -139,6 +141,13 @@ async def create_session(
     actor = await _actor_for_identity(db, identity)
     session_token, csrf_token = await issue_session(
         db, actor_id=actor.actor_id, ttl_seconds=settings.AUTH_SESSION_TTL_SECONDS
+    )
+    await emit_audit(
+        db,
+        PolicyContext(actor.actor_id, actor.role, "clinical"),
+        action="auth.session.create",
+        resource_type="server_session",
+        outcome="success",
     )
     _set_auth_cookies(response, session_token, csrf_token)
     return {"authenticated": True, "actor": _actor_payload(actor)}

@@ -1,5 +1,6 @@
 """Shared identity and opaque server-session primitives for both data planes."""
 
+from .policy import AuthorizationDenied, PolicyContext, authorize, emit_audit
 from .session import (
     CSRF_COOKIE_NAME,
     SESSION_COOKIE_NAME,
@@ -38,4 +39,8 @@ __all__ = [
     "revoke_session",
     "rotate_session",
     "token_hash",
+    "AuthorizationDenied",
+    "PolicyContext",
+    "authorize",
+    "emit_audit",
 ]

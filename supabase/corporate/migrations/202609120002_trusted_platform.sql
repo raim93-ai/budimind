@@ -49,6 +49,8 @@ create table if not exists private.audit_event (
   outcome text not null check (outcome in ('success','denied','failure')),
   metadata jsonb not null default '{}'::jsonb
 );
+-- Keep actor_id as an immutable audit reference; actor deletion must not mutate audit rows.
+alter table private.audit_event drop constraint if exists audit_event_actor_id_fkey;
 
 create or replace function private.prevent_audit_mutation() returns trigger
 language plpgsql security definer set search_path = pg_catalog, private as $$
