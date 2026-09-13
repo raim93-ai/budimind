@@ -47,15 +47,15 @@ const features = [
 export default function HomePage() {
   return (
     <>
-      {/* Hero */}
-      <section className="flex-1 flex items-center justify-center py-12 sm:py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+      <section className="flex-1 flex items-center justify-center py-16 sm:py-20 md:py-28 border-b border-gray-200 bg-white">
         <div className="container text-center max-w-3xl px-4">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-primary text-balance">
-            Confident. Confidential. Actionable.
+            Better workplace decisions start with better conditions.
           </h1>
           <p className="text-base sm:text-lg text-secondary mb-6 sm:mb-8 max-w-2xl mx-auto text-pretty">
-            Confidential workforce assessments, privacy-released insights, and evidence-based
-            interventions for organisational wellbeing.
+            BudiMind is preparing a workplace wellbeing intelligence service for organisations in
+            Malaysia. It is designed to show patterns in working conditions without exposing named
+            people or private clinical care.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link href="/features" className="w-full sm:w-auto">
@@ -77,33 +77,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Crisis Support Banner */}
       <div className="container py-6">
         <CrisisSupport compact />
       </div>
 
-      {/* Trust signals */}
-      <section className="py-8 sm:py-12 border-t border-b border-gray-200 dark:border-gray-700">
-        <div className="container text-center">
-          <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-4 sm:mb-6">
-            Trusted by organisations
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 opacity-60">
-            <span className="text-sm font-medium">Enterprise</span>
-            <span className="text-sm">&middot;</span>
-            <span className="text-sm font-medium">SME</span>
-            <span className="text-sm">&middot;</span>
-            <span className="text-sm font-medium">Government</span>
-            <span className="text-sm">&middot;</span>
-            <span className="text-sm font-medium">Healthcare</span>
-          </div>
-        </div>
-      </section>
-
       {/* Features */}
       <Section
         title="What We Offer"
-        subtitle="A comprehensive platform for workforce mental health — from assessment to intervention."
+        subtitle="A planned service for understanding organisational conditions and choosing proportionate action."
         center
       >
         <FeatureGrid features={features} />
@@ -125,10 +106,9 @@ export default function HomePage() {
         />
       </div>
 
-      {/* CTA */}
       <CTASection
-        title="Ready to transform your workplace wellbeing?"
-        description="Start with a free pilot. Scale with confidence."
+        title="Planning a workplace wellbeing programme?"
+        description="Contact us to discuss the service model and launch timeline."
         actions={[
           { label: 'Get Started', href: '/contact' },
           { label: 'Learn More', href: '/about', variant: 'secondary' },

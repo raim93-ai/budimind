@@ -1,7 +1,7 @@
 # Luna Execution Handoff
 
 - Status: READY FOR SYNTHETIC IMPLEMENTATION
-- Current task: S02-T04
+- Current task: S03-T01
 - Deployment rule: finish and verify all local coding through Stage 10 before creating cloud deployments.
 
 ## Read order
@@ -92,7 +92,7 @@ applicable, purpose and relationship. Emit payload-minimised append-only audit r
 Exit: allow tests plus wrong-role, wrong-tenant, missing-purpose, missing-relationship and wrong-plane denials pass for
 both APIs.
 
-### S02-T04 — web shells
+### S02-T04 — web shells (complete; see `docs/evidence/S02-T04.md`)
 
 Complete shared tokens and primitives without redesigning working pages unnecessarily. Add session-expired and
 maintenance states. Remove remaining gradients, automatic dark styling, unverifiable copy and decorative metrics. Test
